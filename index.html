@@ -4,757 +4,587 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dojang Agadir</title>
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: fixed left rail of navigation on desktop, bottom tab bar on phone; one scrolling work area with a slide-in detail drawer. */
+/* Layout: dark sidebar + light content; mobile = top bar with hamburger drawer. */
 :root {
-  --bg: #f6f4ef;
-  --surface: #ffffff;
-  --surface-2: #efece5;
-  --line: #ddd8cd;
-  --fg: #1c1b1a;
-  --muted: #6b665c;
-  --accent: #c0182f;       /* taegeuk red */
-  --accent-fg: #ffffff;
-  --blue: #1d4ea0;         /* taegeuk blue */
-  --ok: #1f7a3e; --ok-bg: #e2f2e7;
-  --warn: #9a6400; --warn-bg: #fbf0d4;
-  --bad: #b3261e; --bad-bg: #fbe3e1;
-  --display: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
-  --body: "IBM Plex Sans", "Segoe UI", Roboto, system-ui, sans-serif;
-  --radius: 10px;
+  --side: #1f2937; --side-fg: #cbd5e1; --side-active: #111827;
+  --bg: #f4f6fb; --card: #ffffff; --line: #e5e7eb; --fg: #111827; --muted: #6b7280;
+  --primary: #4f46e5; --primary-fg: #fff;
+  --green: #22c55e; --amber: #f59e0b; --red: #ef4444; --blue: #3b82f6; --pink: #ec4899; --teal: #10b981; --sky: #0ea5e9; --slate: #64748b; --orange: #f97316; --brown: #b45309; --wine: #b91c1c;
+  --radius: 12px; --shadow: 0 1px 2px rgba(16,24,40,.05), 0 1px 3px rgba(16,24,40,.06);
+  --font: "DM Sans", "Segoe UI", Roboto, system-ui, sans-serif;
+  color-scheme: light;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg:#15171b; --surface:#1e2127; --surface-2:#262a31; --line:#353a43; --fg:#ecebe6; --muted:#9a9ca4;
-  --accent:#e2384f; --accent-fg:#ffffff; --blue:#5b8de0;
-  --ok:#5fcf86; --ok-bg:#1b2f22; --warn:#f0c04f; --warn-bg:#352c13; --bad:#ff7b72; --bad-bg:#3a1f1d;
-  color-scheme: dark;
-}}
-:root[data-theme="dark"] {
-  --bg:#15171b; --surface:#1e2127; --surface-2:#262a31; --line:#353a43; --fg:#ecebe6; --muted:#9a9ca4;
-  --accent:#e2384f; --accent-fg:#ffffff; --blue:#5b8de0;
-  --ok:#5fcf86; --ok-bg:#1b2f22; --warn:#f0c04f; --warn-bg:#352c13; --bad:#ff7b72; --bad-bg:#3a1f1d;
-  color-scheme: dark;
-}
-html, body { height: 100%; }
-body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 14px; line-height: 1.45; }
 * { box-sizing: border-box; }
-h1,h2,h3 { font-family: var(--display); font-weight: 700; letter-spacing: .01em; margin: 0; text-wrap: balance; }
-h1 { font-size: 30px; line-height: 1.05; }
-h2 { font-size: 22px; }
-h3 { font-size: 17px; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 14px; line-height: 1.45; }
+h1,h2,h3,h4 { margin: 0; font-weight: 700; }
 button, input, select, textarea { font: inherit; color: inherit; }
-.app { display: grid; grid-template-columns: 210px 1fr; min-height: 100%; }
-nav.rail { background: var(--surface); border-right: 1px solid var(--line); padding: 20px 14px; display: flex; flex-direction: column; gap: 4px; position: sticky; top: env(safe-area-inset-top,0px); height: 100vh; }
-.brand { padding: 4px 8px 18px; }
-.brand .club { font-family: var(--display); font-size: 22px; line-height: 1.1; font-weight: 700; }
-.brand .sub { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
-.brand .stripe { height: 5px; width: 54px; margin-top: 10px; background: linear-gradient(90deg, var(--accent) 50%, var(--blue) 50%); border-radius: 3px; }
-nav.rail button { text-align: left; background: none; border: 0; border-radius: 8px; padding: 10px 12px; cursor: pointer; font-weight: 500; color: var(--muted); display: flex; align-items: center; gap: 10px; }
-nav.rail button svg { width: 18px; height: 18px; flex: none; }
-nav.rail button[aria-current="page"] { background: var(--surface-2); color: var(--fg); }
-nav.rail button:hover { color: var(--fg); }
-nav.rail .spacer { flex: 1; }
-nav.rail .who { font-size: 12px; color: var(--muted); padding: 8px 12px; }
-main { padding-block: 24px 90px; padding-inline: 28px; min-width: 0; max-width: 1180px; width: 100%; }
-.page { display: none; }
-.page.active { display: block; }
-.pagehead { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
-.pagehead .eyebrow { color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; font-weight: 600; }
-.actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 8px 14px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
-.btn:hover { border-color: var(--muted); }
-.btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
-.btn.primary:hover { filter: brightness(1.08); }
-.btn.danger { color: var(--bad); }
-.btn.sm { padding: 5px 10px; font-size: 13px; }
+a { color: var(--primary); }
+[hidden] { display: none !important; }
+[dir=rtl] { text-align: right; }
+.app { display: grid; grid-template-columns: 230px 1fr; min-height: 100%; }
+/* Sidebar */
+.sidecol { background: var(--side); }
+.side { background: var(--side); color: var(--side-fg); padding: 16px 10px; position: sticky; top: 0; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
+.brand { display: flex; align-items: center; gap: 10px; padding: 6px 10px 18px; color: #fff; }
+.brand .logo { width: 36px; height: 36px; border-radius: 50%; background: #fff; display: grid; place-items: center; flex: none; overflow: hidden; }
+.brand .logo svg { width: 24px; height: 24px; }
+.brand .name { font-weight: 700; font-size: 13px; line-height: 1.2; text-transform: uppercase; letter-spacing: .02em; }
+.nav button { width: 100%; display: flex; align-items: center; gap: 10px; background: none; border: 0; color: var(--side-fg); padding: 9px 12px; border-radius: 8px; cursor: pointer; text-align: start; font-weight: 500; font-size: 13.5px; }
+.nav button svg { width: 16px; height: 16px; flex: none; opacity: .85; }
+.nav button:hover { background: rgba(255,255,255,.06); color: #fff; }
+.nav button[aria-current=page] { background: var(--side-active); color: #fff; box-shadow: inset 3px 0 0 var(--primary); }
+[dir=rtl] .nav button[aria-current=page] { box-shadow: inset -3px 0 0 var(--primary); }
+/* Topbar */
+.top { background: var(--card); border-bottom: 1px solid var(--line); padding: 10px 20px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 10; }
+.top .title { font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.top .title svg { width: 18px; height: 18px; color: var(--primary); }
+.burger { display: none; background: var(--side); color: #fff; border: 0; border-radius: 8px; width: 38px; height: 38px; cursor: pointer; }
+.langs { display: flex; gap: 6px; }
+.langs button { border: 2px solid transparent; border-radius: 4px; padding: 0; width: 30px; height: 22px; cursor: pointer; background: none; overflow: hidden; }
+.langs button.on { border-color: var(--primary); }
+.langs svg { width: 100%; height: 100%; display: block; }
+.bell { position: relative; background: none; border: 0; cursor: pointer; width: 36px; height: 36px; border-radius: 8px; display: grid; place-items: center; }
+.bell svg { width: 18px; height: 18px; }
+.bell .n { position: absolute; top: 2px; right: 2px; background: var(--red); color: #fff; font-size: 10px; font-weight: 700; border-radius: 999px; padding: 1px 5px; }
+main { padding: 20px; min-width: 0; }
+.page { display: none; } .page.active { display: block; }
+/* Tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.tile { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: flex; gap: 12px; align-items: center; cursor: pointer; box-shadow: var(--shadow); text-align: start; }
+.tile:hover { border-color: #c7d2fe; }
+.tile .ic { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; color: #fff; flex: none; }
+.tile .ic svg { width: 20px; height: 20px; }
+.tile b { display: block; font-size: 15px; }
+.tile small { color: var(--muted); font-size: 12px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: flex; gap: 12px; align-items: center; cursor: pointer; text-align: start; }
+.stat.on { outline: 2px solid var(--primary); }
+.stat .ic { width: 38px; height: 38px; border-radius: 9px; color: #fff; display: grid; place-items: center; flex: none; }
+.stat .ic svg { width: 18px; height: 18px; }
+.stat b { font-size: 20px; display: block; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat small { color: var(--muted); font-size: 12px; }
+/* Cards & grid */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); min-width: 0; }
+.card h3 { font-size: 15px; }
+.card .sub { color: var(--muted); font-size: 12px; margin-bottom: 12px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; margin-bottom: 10px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.donut { width: 150px; height: 150px; border-radius: 50%; margin: 6px auto; position: relative; display: grid; place-items: center; }
+.donut::before { content: ""; position: absolute; inset: 30px; background: var(--card); border-radius: 50%; }
+.donut .c { position: relative; text-align: center; }
+.donut .c b { font-size: 20px; display: block; line-height: 1; }
+.donut .c small { color: var(--muted); font-size: 11px; }
+.beltlist { display: flex; flex-direction: column; gap: 6px; }
+.beltlist .r { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.beltlist .r .sw { width: 30px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,.15); flex: none; position: relative; overflow: hidden; }
+.beltlist .r .sw i { position: absolute; left: 0; right: 0; top: 50%; height: 4px; transform: translateY(-50%); }
+.beltlist .r .sw.black i { background: #000; }
+.beltlist .r .lb { flex: 1; }
+.beltlist .r .mini { width: 18px; height: 6px; border-radius: 2px; border: 1px solid rgba(0,0,0,.15); }
+.beltlist .r b { width: 28px; text-align: end; font-variant-numeric: tabular-nums; }
+/* Toolbar, buttons, tables */
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.toolbar .grow { flex: 1 1 200px; }
+.toolbar select, .toolbar input[type=date], .toolbar input[type=month] { width: auto; flex: 0 1 220px; }
+input, select, textarea { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; width: 100%; min-width: 0; }
+select { appearance: auto; }
+.btn { border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 8px 14px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.btn:hover { background: #f9fafb; }
+.btn.p { background: var(--primary); color: #fff; border-color: var(--primary); }
+.btn.p:hover { background: #4338ca; }
+.btn.r { background: var(--red); color: #fff; border-color: var(--red); }
+.btn.g { background: var(--green); color: #fff; border-color: var(--green); }
+.btn.sm { padding: 5px 10px; font-size: 12.5px; }
+.btn.ghost { border-color: transparent; background: none; color: var(--primary); }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
-.btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, nav button:focus-visible, tr[tabindex]:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-/* KPI tiles */
-.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }
-.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; min-width: 0; }
-.kpi .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
-.kpi .num { font-family: var(--display); font-size: 34px; line-height: 1.1; font-variant-numeric: tabular-nums; margin-top: 4px; }
-.kpi .num small { font-size: 16px; color: var(--muted); font-family: var(--body); font-weight: 500; margin-left: 4px; }
-.kpi.bad .num { color: var(--bad); } .kpi.warn .num { color: var(--warn); } .kpi.ok .num { color: var(--ok); }
-.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; min-width: 0; }
-.card h3 { margin-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.card h3 .count { font-family: var(--body); font-size: 12px; color: var(--muted); font-weight: 500; }
-.list { display: flex; flex-direction: column; }
-.list .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); cursor: pointer; }
-.list .row:first-child { border-top: 0; }
-.list .row .name { font-weight: 500; }
-.list .row .meta { color: var(--muted); font-size: 12px; }
-.empty { color: var(--muted); padding: 14px 0; font-size: 13px; }
-/* Table */
-.toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
-.toolbar input[type=search] { flex: 1 1 220px; min-width: 0; }
-.toolbar select { flex: 0 1 220px; width: auto; }
-th, td { padding: 9px 10px; }
-input, select, textarea { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; width: 100%; min-width: 0; }
-input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--accent); padding: 0; }
-.tablewrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.btn svg { width: 14px; height: 14px; }
+.tw { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
 table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-th, td { text-align: left; padding: 10px 12px; border-top: 1px solid var(--line); white-space: nowrap; }
-th { border-top: 0; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); background: var(--surface-2); }
-tbody tr { cursor: pointer; }
-tbody tr:hover { background: var(--surface-2); }
-td.num, th.num { text-align: right; }
-.pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
-.pill.ok { background: var(--ok-bg); color: var(--ok); }
-.pill.warn { background: var(--warn-bg); color: var(--warn); }
-.pill.bad { background: var(--bad-bg); color: var(--bad); }
-.pill.off { background: var(--surface-2); color: var(--muted); }
+th, td { padding: 10px 12px; text-align: start; border-top: 1px solid var(--line); white-space: nowrap; vertical-align: middle; }
+th { border-top: 0; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+tbody tr.click { cursor: pointer; } tbody tr.click:hover { background: #f8fafc; }
+.av { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #f97316, #ef4444); color: #fff; font-weight: 700; font-size: 12px; display: inline-grid; place-items: center; flex: none; }
+.pill { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+.pill.g { background: #dcfce7; color: #15803d; } .pill.a { background: #fef3c7; color: #b45309; } .pill.r { background: #fee2e2; color: #b91c1c; } .pill.b { background: #dbeafe; color: #1d4ed8; } .pill.n { background: #f1f5f9; color: var(--muted); }
+.badge { display: inline-block; min-width: 26px; text-align: center; padding: 3px 7px; border-radius: 6px; color: #fff; font-weight: 700; font-size: 12px; }
+.badge.g { background: var(--green); } .badge.a { background: var(--amber); } .badge.r { background: var(--red); }
 .belt { display: inline-flex; align-items: center; gap: 6px; }
-.belt i { width: 22px; height: 8px; border-radius: 2px; border: 1px solid rgba(0,0,0,.25); flex: none; display: inline-block; }
-/* Attendance */
-.attn { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
-.attn label { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; cursor: pointer; }
-.attn label.on { border-color: var(--ok); background: var(--ok-bg); }
-.attn label.exp { opacity: .7; }
-.attn label .n { font-weight: 500; }
-.attn label .m { font-size: 12px; color: var(--muted); }
-/* Drawer + modal */
-.drawer { position: fixed; inset: 0; z-index: 30; display: none; }
-.drawer.open { display: block; }
-.drawer .scrim { position: absolute; inset: 0; background: rgba(0,0,0,.35); }
-.drawer .panel { position: absolute; top: 0; right: 0; bottom: 0; width: min(460px, 100%); background: var(--surface); border-left: 1px solid var(--line); overflow-y: auto; padding: 22px 22px calc(22px + env(safe-area-inset-bottom,0px)); padding-top: calc(22px + env(safe-area-inset-top,0px)); }
-.drawer .close { position: absolute; top: calc(14px + env(safe-area-inset-top,0px)); right: 14px; }
-.dl { display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px; font-size: 13px; margin: 14px 0; }
-.dl dt { color: var(--muted); } .dl dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
-dialog { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--fg); padding: 0; width: min(640px, calc(100% - 32px)); max-height: calc(100% - 32px); }
-dialog::backdrop { background: rgba(0,0,0,.4); }
-dialog form { padding: 22px; }
-dialog h2 { margin-bottom: 14px; }
+.belt .sw { width: 22px; height: 9px; border-radius: 2px; border: 1px solid rgba(0,0,0,.15); position: relative; overflow: hidden; }
+.belt .sw i { position: absolute; left: 0; right: 0; top: 50%; height: 3px; transform: translateY(-50%); }
+.empty { color: var(--muted); padding: 24px; text-align: center; }
+.ph { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.ph p { margin: 2px 0 0; color: var(--muted); font-size: 12.5px; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+/* Forms / modals */
+dialog { border: 0; border-radius: 14px; padding: 0; width: min(680px, calc(100% - 24px)); max-height: calc(100% - 24px); box-shadow: 0 20px 50px rgba(0,0,0,.25); }
+dialog::backdrop { background: rgba(17,24,39,.5); }
+dialog form, dialog .body { padding: 20px; }
+dialog h2 { font-size: 17px; margin-bottom: 14px; }
 .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .fields .full { grid-column: 1 / -1; }
-.field label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
-.field .hint { font-size: 12px; color: var(--muted); margin-top: 3px; }
-.formfoot { display: flex; justify-content: space-between; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
-.formfoot .right { display: flex; gap: 8px; margin-left: auto; }
-.section { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
-.section h3 { margin-bottom: 8px; }
-/* Chart */
-.bars { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 10px; align-items: end; height: 150px; padding-top: 6px; }
-.bars .b { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; min-width: 0; }
-.bars .b .v { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.bars .b .bar { width: 100%; max-width: 46px; background: var(--blue); border-radius: 4px 4px 0 0; min-height: 2px; }
-.bars .b.cur .bar { background: var(--accent); }
+.f label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+.f .hint { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+.ff { display: flex; justify-content: space-between; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+.ff .right { display: flex; gap: 8px; margin-inline-start: auto; }
+.chk { display: flex; align-items: center; gap: 8px; }
+.chk input { width: 18px; height: 18px; accent-color: var(--primary); padding: 0; }
+.section { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.section h3 { font-size: 14px; margin-bottom: 8px; }
+.dl { display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px; font-size: 13px; margin: 12px 0; }
+.dl dt { color: var(--muted); } .dl dd { margin: 0; overflow-wrap: anywhere; }
+.info { background: #eef2ff; color: #3730a3; border-radius: 8px; padding: 10px 12px; font-size: 13px; margin-top: 10px; }
+.warn { background: #fef3c7; color: #92400e; border-radius: 8px; padding: 10px 12px; font-size: 13px; }
+.attn { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.attn label { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; cursor: pointer; }
+.attn label.on { border-color: var(--green); background: #f0fdf4; }
+.attn label .m { font-size: 12px; color: var(--muted); }
+.bars { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 10px; align-items: end; height: 160px; padding-top: 8px; }
+.bars .b { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; }
+.bars .b .v { font-size: 10.5px; color: var(--muted); }
+.bars .b .st { width: 100%; max-width: 48px; display: flex; gap: 3px; align-items: flex-end; height: 100%; }
+.bars .b .st i { flex: 1; border-radius: 3px 3px 0 0; min-height: 2px; display: block; }
 .bars .b .l { font-size: 11px; color: var(--muted); text-transform: uppercase; }
-/* Settings */
 .editlist { display: flex; flex-direction: column; gap: 8px; }
-.editlist .item { display: grid; grid-template-columns: 1fr 1fr 110px auto; gap: 8px; align-items: center; }
-.editlist .item.g { grid-template-columns: 1fr 1.4fr auto; }
-.toast { position: fixed; left: 50%; bottom: calc(80px + env(safe-area-inset-bottom,0px)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-weight: 500; z-index: 50; opacity: 0; transition: opacity .2s; pointer-events: none; max-width: calc(100% - 32px); }
+.editlist .it { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr auto; gap: 8px; align-items: center; }
+.editlist .it.s2 { grid-template-columns: 1fr 90px auto; }
+.qrwrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+video { width: 100%; max-width: 100%; border-radius: 10px; background: #000; aspect-ratio: 4/3; }
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #111827; color: #fff; padding: 10px 16px; border-radius: 999px; font-weight: 500; z-index: 60; opacity: 0; transition: opacity .2s; pointer-events: none; max-width: calc(100% - 32px); }
 .toast.show { opacity: 1; }
-.banner { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; }
-.banner.info { background: var(--surface-2); color: var(--muted); border-color: var(--line); }
-.tabbar { display: none; }
-@media (max-width: 760px) {
+.scrim { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 20; display: none; }
+/* Login */
+.login { min-height: 100vh; display: grid; place-items: center; padding: 20px; background: linear-gradient(160deg, #1f2937, #4f46e5); }
+.login .box { background: #fff; border-radius: 16px; padding: 28px; width: min(380px, 100%); box-shadow: 0 25px 60px rgba(0,0,0,.35); }
+.login .box h1 { font-size: 20px; margin-bottom: 4px; }
+.login .box p { color: var(--muted); margin: 0 0 16px; font-size: 13px; }
+.qrbox { display: grid; grid-template-columns: repeat(auto-fill, 1fr); }
+@media (max-width: 860px) {
   .app { grid-template-columns: 1fr; }
-  nav.rail { display: none; }
-  main { padding-inline: 16px; padding-block: 18px 90px; }
-  .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom,0px); z-index: 20; }
-  .tabbar button { background: none; border: 0; padding: 9px 4px 7px; font-size: 10px; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
-  .tabbar button svg { width: 20px; height: 20px; }
-  .tabbar button[aria-current="page"] { color: var(--accent); }
+  .sidecol { display: contents; }
+  .side { position: fixed; left: 0; top: 0; bottom: 0; width: 250px; z-index: 30; transform: translateX(-100%); transition: transform .2s; }
+  [dir=rtl] .side { left: auto; right: 0; transform: translateX(100%); }
+  .side.open { transform: none; }
+  .scrim.open { display: block; }
+  .burger { display: grid; place-items: center; }
+  main { padding: 14px; }
   .fields { grid-template-columns: 1fr; }
-  .editlist .item, .editlist .item.g { grid-template-columns: 1fr 1fr; }
-  .dl { grid-template-columns: 1fr; gap: 2px 0; } .dl dt { margin-top: 8px; }
-  h1 { font-size: 26px; }
+  .dl { grid-template-columns: 1fr; gap: 2px; } .dl dt { margin-top: 8px; }
+  .editlist .it, .editlist .it.s2 { grid-template-columns: 1fr 1fr; }
+  .tile b { font-size: 14px; }
+  .top { padding: 8px 12px; gap: 8px; }
+  .top .title span:last-child { display: none; }
+  #logout span { display: none; }
+  #logout { padding: 8px; }
+  .tiles { grid-template-columns: 1fr 1fr; }
+  .tile { flex-direction: column; align-items: flex-start; gap: 8px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
-<div class="app">
-  <nav class="rail" id="rail">
-    <div class="brand">
-      <div class="club" id="brandName">Dojang Agadir</div>
-      <div class="sub">Gestion du club</div>
-      <div class="stripe"></div>
-    </div>
-    <div class="spacer"></div>
-    <div class="who" id="who"></div>
-  </nav>
-  <main>
-    <div id="banner" class="banner" hidden></div>
 
-    <!-- DASHBOARD -->
-    <section class="page active" id="page-dash">
-      <div class="pagehead">
-        <div><div class="eyebrow" id="todayLabel"></div><h1>Tableau de bord</h1></div>
-        <div class="actions">
-          <button class="btn" data-open="payment">Encaisser</button>
-          <button class="btn primary" data-open="member">+ Nouvel adhérent</button>
-        </div>
-      </div>
-      <div class="kpis" id="kpis"></div>
-      <div class="grid2">
-        <div class="card"><h3>À relancer <span class="count" id="cRelance"></span></h3><div class="list" id="listRelance"></div></div>
-        <div class="card"><h3>Expirent dans 7 jours <span class="count" id="cSoon"></span></h3><div class="list" id="listSoon"></div></div>
-        <div class="card"><h3>Encaissements (6 mois)</h3><div class="bars" id="chart"></div></div>
-        <div class="card"><h3>Certificats médicaux à renouveler <span class="count" id="cMed"></span></h3><div class="list" id="listMed"></div></div>
-      </div>
-    </section>
-
-    <!-- MEMBERS -->
-    <section class="page" id="page-members">
-      <div class="pagehead">
-        <div><div class="eyebrow">Fichier</div><h1>Adhérents</h1></div>
-        <div class="actions">
-          <button class="btn" id="btnExport" hidden>Exporter CSV</button>
-          <button class="btn primary" data-open="member">+ Nouvel adhérent</button>
-        </div>
-      </div>
-      <div class="toolbar">
-        <input type="search" id="q" placeholder="Rechercher nom, téléphone…" aria-label="Rechercher">
-        <select id="fGroup" aria-label="Groupe"><option value="">Tous les groupes</option></select>
-        <select id="fStatus" aria-label="Statut">
-          <option value="">Tous les statuts</option>
-          <option value="ok">Actifs</option>
-          <option value="warn">Expirent bientôt</option>
-          <option value="bad">Expirés</option>
-          <option value="off">Archivés</option>
-        </select>
-      </div>
-      <div class="tablewrap"><table>
-        <thead><tr><th>Nom</th><th>Groupe</th><th>Ceinture</th><th>Téléphone</th><th>Abonnement</th><th>Fin</th><th>Statut</th></tr></thead>
-        <tbody id="memberRows"></tbody>
-      </table></div>
-      <div class="empty" id="memberEmpty" hidden></div>
-    </section>
-
-    <!-- ATTENDANCE -->
-    <section class="page" id="page-attn">
-      <div class="pagehead">
-        <div><div class="eyebrow">Appel</div><h1>Présences</h1></div>
-      </div>
-      <div class="toolbar">
-        <input type="date" id="aDate" aria-label="Date" style="flex:0 1 180px">
-        <select id="aGroup" aria-label="Groupe" style="flex:0 1 260px"></select>
-        <span id="aCount" style="color:var(--muted)"></span>
-      </div>
-      <div class="attn" id="attnList"></div>
-      <div class="empty" id="attnEmpty" hidden></div>
-    </section>
-
-    <!-- PAYMENTS -->
-    <section class="page" id="page-pay">
-      <div class="pagehead">
-        <div><div class="eyebrow">Caisse</div><h1>Paiements</h1></div>
-        <div class="actions"><button class="btn primary" data-open="payment">+ Encaisser</button></div>
-      </div>
-      <div class="kpis" id="payKpis"></div>
-      <div class="toolbar">
-        <input type="month" id="pMonth" aria-label="Mois" style="flex:0 1 180px">
-        <input type="search" id="pq" placeholder="Rechercher un adhérent…" aria-label="Rechercher">
-      </div>
-      <div class="tablewrap"><table>
-        <thead><tr><th>Date</th><th>Adhérent</th><th>Formule</th><th>Mode</th><th class="num">Montant</th><th>Note</th><th></th></tr></thead>
-        <tbody id="payRows"></tbody>
-      </table></div>
-      <div class="empty" id="payEmpty" hidden></div>
-    </section>
-
-    <!-- SETTINGS -->
-    <section class="page" id="page-settings">
-      <div class="pagehead"><div><div class="eyebrow">Club</div><h1>Paramètres</h1></div></div>
-      <form id="settingsForm" class="card">
-        <div class="fields">
-          <div class="field full"><label for="sName">Nom du club</label><input id="sName"></div>
-          <div class="field"><label for="sFee">Frais d'inscription (DH)</label><input id="sFee" type="number" min="0" step="1"></div>
-          <div class="field"><label for="sPhone">Téléphone du club</label><input id="sPhone"></div>
-        </div>
-        <div class="section">
-          <h3>Formules d'abonnement</h3>
-          <div class="editlist" id="plansList"></div>
-          <button type="button" class="btn sm" id="addPlan" style="margin-top:8px">+ Formule</button>
-        </div>
-        <div class="section">
-          <h3>Groupes et horaires</h3>
-          <div class="editlist" id="groupsList"></div>
-          <button type="button" class="btn sm" id="addGroup" style="margin-top:8px">+ Groupe</button>
-        </div>
-        <div class="formfoot"><div class="right"><button type="submit" class="btn primary">Enregistrer</button></div></div>
-      </form>
-      <div class="card" style="margin-top:16px">
-        <h3>Données</h3>
-        <p style="color:var(--muted);margin:0 0 10px">Version de démonstration : les données sont enregistrées dans ce navigateur, sur cet appareil.</p>
-        <div class="actions">
-          <button type="button" class="btn" id="btnDemo">Charger les données de démonstration</button>
-          <button type="button" class="btn danger" id="btnWipe">Tout effacer</button>
-        </div>
-      </div>
-    </section>
-  </main>
+<div class="login" id="login">
+  <form class="box" id="loginForm">
+    <div class="brand" style="color:var(--fg);padding:0 0 14px"><div class="logo" style="background:var(--side)"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-1.5z"/></svg></div><div class="name" id="loginClub">Dojang Agadir</div></div>
+    <h1 data-i18n="login.title">Connexion</h1>
+    <p data-i18n="login.sub">Espace de gestion du club</p>
+    <div class="f"><label for="loginPass" data-i18n="login.pass">Mot de passe</label><input id="loginPass" type="password" autocomplete="current-password" required></div>
+    <div class="hint" id="loginHint" style="font-size:12px;color:var(--muted);margin-top:6px"></div>
+    <button class="btn p" type="submit" style="width:100%;justify-content:center;margin-top:14px" data-i18n="login.btn">Se connecter</button>
+  </form>
 </div>
 
-<nav class="tabbar" id="tabbar"></nav>
-
-<!-- Member drawer -->
-<div class="drawer" id="drawer">
-  <div class="scrim" data-close-drawer></div>
-  <div class="panel" role="dialog" aria-label="Fiche adhérent">
-    <button class="btn sm close" data-close-drawer aria-label="Fermer">✕</button>
-    <div id="drawerBody"></div>
+<div class="app" id="app" hidden>
+  <div class="scrim" id="scrim"></div>
+  <div class="sidecol"><aside class="side" id="side">
+    <div class="brand"><div class="logo"><svg viewBox="0 0 24 24" fill="#c0182f"><path d="M12 2l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-1.5z"/></svg></div><div class="name" id="sideClub">Dojang Agadir</div></div>
+    <nav class="nav" id="nav"></nav>
+  </aside></div>
+  <div style="min-width:0">
+    <header class="top">
+      <button class="burger" id="burger" aria-label="Menu"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button>
+      <div class="title"><span id="topIcon"></span><span id="topTitle"></span></div>
+      <button class="bell" id="bell" aria-label="Alertes"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 0 0-5-5.9V4a1 1 0 0 0-2 0v1.1A6 6 0 0 0 6 11v5l-2 2v1h16v-1z"/></svg><span class="n" id="bellN" hidden></span></button>
+      <div class="langs" id="langs"></div>
+      <button class="btn sm" id="logout"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 13v-2H7V8l-5 4 5 4v-3zm4-10H10a2 2 0 0 0-2 2v3h2V5h10v14H10v-3H8v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/></svg><span data-i18n="logout">Déconnexion</span></button>
+    </header>
+    <main id="main"></main>
   </div>
 </div>
 
-<!-- Member form -->
-<dialog id="dlgMember">
-  <form id="memberForm">
-    <h2 id="memberFormTitle">Nouvel adhérent</h2>
-    <input type="hidden" id="mId">
-    <div class="fields">
-      <div class="field"><label for="mLast">Nom *</label><input id="mLast" required></div>
-      <div class="field"><label for="mFirst">Prénom *</label><input id="mFirst" required></div>
-      <div class="field"><label for="mBirth">Date de naissance</label><input id="mBirth" type="date"></div>
-      <div class="field"><label for="mSex">Sexe</label><select id="mSex"><option value="">—</option><option value="M">Garçon / Homme</option><option value="F">Fille / Femme</option></select></div>
-      <div class="field"><label for="mPhone">Téléphone</label><input id="mPhone" placeholder="06 00 00 00 00"></div>
-      <div class="field"><label for="mParent">Parent / tuteur (si mineur)</label><input id="mParent" placeholder="Nom et téléphone"></div>
-      <div class="field"><label for="mGroup">Groupe *</label><select id="mGroup" required></select></div>
-      <div class="field"><label for="mBelt">Ceinture</label><select id="mBelt"></select></div>
-      <div class="field"><label for="mJoin">Date d'inscription</label><input id="mJoin" type="date"></div>
-      <div class="field"><label for="mEnd">Fin d'abonnement</label><input id="mEnd" type="date"><div class="hint">Mise à jour automatiquement à chaque paiement</div></div>
-      <div class="field"><label for="mCin">CIN</label><input id="mCin"></div>
-      <div class="field"><label for="mLicence">N° licence FRMTKD</label><input id="mLicence"></div>
-      <div class="field"><label for="mMed">Certificat médical (date)</label><input id="mMed" type="date"><div class="hint">Valable 1 an</div></div>
-      <div class="field"><label for="mQuartier">Quartier / adresse</label><input id="mQuartier"></div>
-      <div class="field full"><label for="mNotes">Notes</label><textarea id="mNotes" rows="2"></textarea></div>
-    </div>
-    <div class="formfoot">
-      <button type="button" class="btn danger" id="mArchive" hidden>Archiver</button>
-      <div class="right"><button type="button" class="btn" data-close-dialog>Annuler</button><button type="submit" class="btn primary">Enregistrer</button></div>
-    </div>
-  </form>
-</dialog>
-
-<!-- Payment form -->
-<dialog id="dlgPay">
-  <form id="payForm">
-    <h2>Encaisser un paiement</h2>
-    <div class="fields">
-      <div class="field full"><label for="pMember">Adhérent *</label><input id="pMember" list="memberList" required placeholder="Tapez un nom…" autocomplete="off"><datalist id="memberList"></datalist><div class="hint" id="pMemberHint"></div></div>
-      <div class="field"><label for="pPlan">Formule *</label><select id="pPlan" required></select></div>
-      <div class="field"><label for="pAmount">Montant (DH) *</label><input id="pAmount" type="number" min="0" step="1" required></div>
-      <div class="field"><label for="pDate">Date</label><input id="pDate" type="date"></div>
-      <div class="field"><label for="pMethod">Mode</label><select id="pMethod"><option>Espèces</option><option>Virement</option><option>Chèque</option><option>Mobile</option></select></div>
-      <div class="field full"><label for="pNote">Note</label><input id="pNote" placeholder="ex. inscription + octobre"></div>
-    </div>
-    <div class="banner info" id="pPreview" hidden></div>
-    <div class="formfoot"><div class="right"><button type="button" class="btn" data-close-dialog>Annuler</button><button type="submit" class="btn primary">Encaisser</button></div></div>
-  </form>
-</dialog>
-
-<!-- Confirm -->
-<dialog id="dlgConfirm">
-  <form method="dialog">
-    <h2 id="confirmTitle">Confirmer</h2>
-    <p id="confirmText"></p>
-    <div class="formfoot"><div class="right"><button value="no" class="btn">Annuler</button><button value="yes" class="btn primary" id="confirmYes">Confirmer</button></div></div>
-  </form>
-</dialog>
-
+<dialog id="dlg"><div id="dlgBody"></div></dialog>
+<dialog id="dlgConfirm"><form method="dialog"><h2 id="cTitle"></h2><p id="cText" style="margin:0"></p><div class="ff"><div class="right"><button value="no" class="btn" data-i18n="cancel">Annuler</button><button value="yes" class="btn r" id="cYes"></button></div></div></form></dialog>
 <div class="toast" id="toast" role="status"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
 (function () {
-  'use strict';
-  const $ = (s, r = document) => r.querySelector(s);
-  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
-  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const pad = n => String(n).padStart(2, '0');
-  const isoDate = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  const today = () => isoDate(new Date());
-  const addMonths = (iso, m) => { const d = new Date(iso + 'T00:00:00'); d.setMonth(d.getMonth() + m); return isoDate(d); };
-  const addDays = (iso, n) => { const d = new Date(iso + 'T00:00:00'); d.setDate(d.getDate() + n); return isoDate(d); };
-  const daysBetween = (a, b) => Math.round((new Date(b+'T00:00:00') - new Date(a+'T00:00:00')) / 864e5);
-  const fmtDate = iso => iso ? new Date(iso+'T00:00:00').toLocaleDateString('fr-MA', {day:'2-digit', month:'short', year:'numeric'}) : '—';
-  const fmtDH = n => (Math.round(n||0)).toLocaleString('fr-MA') + ' DH';
-  const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-  const age = iso => { if (!iso) return null; const b = new Date(iso+'T00:00:00'), t = new Date(); let a = t.getFullYear()-b.getFullYear(); if (t < new Date(t.getFullYear(), b.getMonth(), b.getDate())) a--; return a; };
+'use strict';
+// ---------- Helpers ----------
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2, '0');
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const today = () => iso(new Date());
+const addDays = (s, n) => { const d = new Date(s + 'T00:00:00'); d.setDate(d.getDate() + n); return iso(d); };
+const addMonths = (s, n) => { const d = new Date(s + 'T00:00:00'); d.setMonth(d.getMonth() + n); return iso(d); };
+const days = (a, b) => Math.round((new Date(b + 'T00:00:00') - new Date(a + 'T00:00:00')) / 864e5);
+const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const age = s => { if (!s) return null; const b = new Date(s + 'T00:00:00'), t = new Date(); let a = t.getFullYear() - b.getFullYear(); if (t < new Date(t.getFullYear(), b.getMonth(), b.getDate())) a--; return a; };
+const sum = (arr, f) => arr.reduce((a, x) => a + (+f(x) || 0), 0);
+const money = n => Math.round(n || 0).toLocaleString('fr-MA') + ' DH';
+const fmtD = s => s ? new Date(s + 'T00:00:00').toLocaleDateString(LANG === 'ar' ? 'ar-MA' : LANG === 'en' ? 'en-GB' : 'fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+const initials = m => ((m.firstName || '')[0] || '') + ((m.lastName || '')[0] || '');
+const fullName = m => `${m.firstName || ''} ${m.lastName || ''}`.trim();
 
-  const BELTS = [
-    ['10e keup', 'Blanche', '#f4f4f4'], ['9e keup', 'Blanche-jaune', '#f4e16a'], ['8e keup', 'Jaune', '#f2c200'],
-    ['7e keup', 'Jaune-verte', '#9fcf4a'], ['6e keup', 'Verte', '#2e9d3f'], ['5e keup', 'Verte-bleue', '#2a8ea0'],
-    ['4e keup', 'Bleue', '#1d4ea0'], ['3e keup', 'Bleue-rouge', '#7a3a7a'], ['2e keup', 'Rouge', '#c0182f'],
-    ['1er keup', 'Rouge-noire', '#5a1020'], ['1er dan/poom', 'Noire 1er dan', '#111111'], ['2e dan/poom', 'Noire 2e dan', '#111111'], ['3e dan/poom', 'Noire 3e dan', '#111111'],
-  ];
-  const DEFAULT_CONFIG = {
-    clubName: 'Dojang Agadir', phone: '', inscriptionFee: 100,
-    plans: [ {id:'p1', name:'Mensuel', months:1, price:150}, {id:'p3', name:'Trimestriel', months:3, price:400}, {id:'p12', name:'Annuel', months:12, price:1400} ],
-    groups: [ {id:'g1', name:'Enfants (6–11 ans)', schedule:'Lun · Mer · Ven 17h–18h'}, {id:'g2', name:'Ados (12–17 ans)', schedule:'Lun · Mer · Ven 18h–19h30'}, {id:'g3', name:'Adultes', schedule:'Mar · Jeu 19h30–21h'}, {id:'g4', name:'Compétition', schedule:'Sam 10h–12h'} ],
-  };
+// ---------- i18n ----------
+const I18N = {
+  fr: { 'login.title':'Connexion','login.sub':'Espace de gestion du club','login.pass':'Mot de passe','login.btn':'Se connecter', logout:'Déconnexion', cancel:'Annuler', save:'Enregistrer', delete:'Supprimer', add:'Ajouter', edit:'Modifier', search:'Rechercher', all:'Tout afficher', confirm:'Confirmer',
+    'nav.dash':'Tableau de bord','nav.players':'Joueurs','nav.coaches':'Entraîneurs','nav.subs':'Abonnements','nav.ins':'Assurance','nav.belt':'Ceinture','nav.exams':'Examens de ceinture','nav.att':'Présence','nav.titles':'Titres','nav.fin':'Finances','nav.prices':'Tarifs','nav.settings':'Paramètres','nav.qr':'Lecteur QR',
+    'tile.players':'Gérer les membres','tile.subs':'Paiements & compte à rebours','tile.ins':'Statut des licences','tile.belt':'Grades & rangs','tile.fin':'Revenus et dépenses','tile.settings':'Configuration du club',
+    'd.belts':'Répartition des ceintures','d.gender':'Répartition par genre','d.cat':'Répartition par catégorie','d.sport':'Répartition par sport','d.ins':'Assurance','d.subs':'Statut des abonnements','d.active':'Joueurs actifs par','d.byBelt':'ceinture','d.byGender':'genre','d.byCat':'catégorie','d.bySport':'sport','d.byIns':"statut d'assurance",'d.bySub':'abonnement', players:'joueurs',
+    male:'Homme', female:'Femme', kids:'Enfants', cadet:'Cadet', junior:'Junior', senior:'Senior', insured:'Assurés', notInsured:'Non assurés', active:'Actif', soon:'Expire bientôt', expired:'Expiré', none:'Aucun',
+    'sub.more2':'Plus de 2 jours','sub.less2':'Moins de 2 jours','sub.exp':'Abonnement expiré','sub.title':'Suivi des paiements mensuels', photo:'Photo', player:'Joueur', belt:'Ceinture', status:'Statut', payDate:'Date de paiement', countdown:'Compte à rebours', paid:'Payé', unpaid:'Non payé', allSports:'Tous les sports',
+    'p.new':'Nouveau joueur','p.edit':'Modifier le joueur', firstName:'Prénom', lastName:'Nom', birth:'Date de naissance', gender:'Genre', phone:'Téléphone', parent:'Parent / tuteur', sport:'Sport', coach:'Entraîneur', join:"Date d'inscription", endDate:"Fin d'abonnement", insDate:"Assurance (date)", cin:'CIN', licence:'N° licence', medical:'Certificat médical', address:'Quartier / adresse', notes:'Notes', archive:'Archiver', unarchive:'Réactiver', archived:'Archivés', category:'Catégorie', years:'ans',
+    pay:'Encaisser', plan:'Formule', amount:'Montant (DH)', date:'Date', method:'Mode', cash:'Espèces', transfer:'Virement', cheque:'Chèque', mobile:'Mobile', note:'Note', newEnd:"Nouvelle fin d'abonnement",
+    'c.new':'Nouvel entraîneur', speciality:'Spécialité', salary:'Salaire mensuel (DH)', email:'Email',
+    'ins.mark':'Marquer assuré', validUntil:"Valable jusqu'au", 'ins.sub':'Licences et assurances des joueurs actifs',
+    'belt.promote':'Changer de ceinture','belt.sub':'Répartition et promotions', promote:'Promouvoir', 'exam.new':'Nouvel examen', 'exam.sub':'Sessions de passage de grade', candidates:'Candidats', targetBelt:'Ceinture visée', pass:'Admis', fail:'Ajourné', pending:'En attente', result:'Résultat', examiner:'Examinateur',
+    'att.sub':'Feuille de présence par séance', present:'présents',
+    't.new':'Nouveau titre', competition:'Compétition', rank:'Résultat', 't.sub':'Palmarès des joueurs', gold:'Or', silver:'Argent', bronze:'Bronze', participation:'Participation',
+    revenue:'Revenus', expenses:'Dépenses', balance:'Solde', 'fin.sub':'Revenus et dépenses du mois', 'exp.new':'Nouvelle dépense', label:'Libellé', categoryExp:'Catégorie', rent:'Loyer', salaries:'Salaires', equipment:'Équipement', utilities:'Eau / électricité', other:'Autre', month:'Mois', last6:'6 derniers mois',
+    'prices.sub':'Formules et prix par sport', months:'Mois', price:'Prix (DH)', inscriptionFee:"Frais d'inscription (DH)", name:'Nom', 'prices.add':'+ Formule',
+    clubName:'Nom du club', password:'Mot de passe de connexion', sports:'Sports', 'sports.add':'+ Sport', color:'Couleur', data:'Données', 'data.sub':'Version de démonstration : les données sont enregistrées dans ce navigateur, sur cet appareil.', loadDemo:'Charger les données de démonstration', wipe:'Tout effacer', exportCsv:'Exporter les joueurs (CSV)',
+    'qr.sub':'Scannez la carte d\'un joueur pour ouvrir sa fiche', 'qr.start':'Démarrer la caméra', 'qr.stop':'Arrêter', 'qr.manual':'Ou saisir le code manuellement', 'qr.unsupported':'Le scan caméra n\'est pas pris en charge sur ce navigateur. Utilisez Chrome sur Android, ou saisissez le code.', 'qr.card':'Carte du joueur', 'qr.notfound':'Aucun joueur avec ce code',
+    saved:'Enregistré', deleted:'Supprimé', alerts:'Alertes', noAlerts:'Aucune alerte', expiring:'abonnements expirent sous 2 jours', expiredN:'abonnements expirés', noIns:'joueurs sans assurance', since:'depuis', in:'dans', day:'j', profile:'Fiche joueur', payments:'Paiements', attendance30:'Présences (30 j)', titles:'Titres', sessions:'séances', total:'Total', noData:'Aucune donnée', chooseFromList:'Choisissez un joueur de la liste', wrongPass:'Mot de passe incorrect', selectSport:'Choisir…' },
+  en: { 'login.title':'Sign in','login.sub':'Club management area','login.pass':'Password','login.btn':'Sign in', logout:'Logout', cancel:'Cancel', save:'Save', delete:'Delete', add:'Add', edit:'Edit', search:'Search', all:'Show all', confirm:'Confirm',
+    'nav.dash':'Dashboard','nav.players':'Players','nav.coaches':'Coaches','nav.subs':'Subscriptions','nav.ins':'Insurance','nav.belt':'Belt','nav.exams':'Belt exams','nav.att':'Attendance','nav.titles':'Titles','nav.fin':'Finance','nav.prices':'Prices','nav.settings':'Settings','nav.qr':'QR Scanner',
+    'tile.players':'Manage members','tile.subs':'Payments & countdown','tile.ins':'Licenses status','tile.belt':'Ranks & grades','tile.fin':'Income & expenses','tile.settings':'Club configuration',
+    'd.belts':'Belt distribution','d.gender':'Gender distribution','d.cat':'Category distribution','d.sport':'Sport distribution','d.ins':'Insurance','d.subs':'Subscription status','d.active':'Active players by','d.byBelt':'belt rank','d.byGender':'gender','d.byCat':'category','d.bySport':'sport','d.byIns':'insurance status','d.bySub':'subscription', players:'players',
+    male:'Male', female:'Female', kids:'Kids', cadet:'Cadet', junior:'Junior', senior:'Senior', insured:'Insured', notInsured:'Not insured', active:'Active', soon:'Expiring soon', expired:'Expired', none:'None',
+    'sub.more2':'More than 2 days','sub.less2':'Less than 2 days','sub.exp':'Subscription expired','sub.title':'Monthly payment tracking', photo:'Photo', player:'Player', belt:'Belt', status:'Status', payDate:'Payment date', countdown:'Countdown', paid:'Paid', unpaid:'Unpaid', allSports:'All sports',
+    'p.new':'New player','p.edit':'Edit player', firstName:'First name', lastName:'Last name', birth:'Date of birth', gender:'Gender', phone:'Phone', parent:'Parent / guardian', sport:'Sport', coach:'Coach', join:'Join date', endDate:'Subscription end', insDate:'Insurance (date)', cin:'ID card', licence:'License no.', medical:'Medical certificate', address:'Address', notes:'Notes', archive:'Archive', unarchive:'Restore', archived:'Archived', category:'Category', years:'y',
+    pay:'Collect payment', plan:'Plan', amount:'Amount (DH)', date:'Date', method:'Method', cash:'Cash', transfer:'Transfer', cheque:'Cheque', mobile:'Mobile', note:'Note', newEnd:'New subscription end',
+    'c.new':'New coach', speciality:'Speciality', salary:'Monthly salary (DH)', email:'Email',
+    'ins.mark':'Mark insured', validUntil:'Valid until', 'ins.sub':'Licenses and insurance of active players',
+    'belt.promote':'Change belt','belt.sub':'Distribution and promotions', promote:'Promote', 'exam.new':'New exam', 'exam.sub':'Grading sessions', candidates:'Candidates', targetBelt:'Target belt', pass:'Passed', fail:'Failed', pending:'Pending', result:'Result', examiner:'Examiner',
+    'att.sub':'Attendance sheet per session', present:'present',
+    't.new':'New title', competition:'Competition', rank:'Result', 't.sub':'Players achievements', gold:'Gold', silver:'Silver', bronze:'Bronze', participation:'Participation',
+    revenue:'Income', expenses:'Expenses', balance:'Balance', 'fin.sub':'Income and expenses of the month', 'exp.new':'New expense', label:'Label', categoryExp:'Category', rent:'Rent', salaries:'Salaries', equipment:'Equipment', utilities:'Utilities', other:'Other', month:'Month', last6:'Last 6 months',
+    'prices.sub':'Plans and prices per sport', months:'Months', price:'Price (DH)', inscriptionFee:'Registration fee (DH)', name:'Name', 'prices.add':'+ Plan',
+    clubName:'Club name', password:'Login password', sports:'Sports', 'sports.add':'+ Sport', color:'Color', data:'Data', 'data.sub':'Demo version: data is stored in this browser, on this device.', loadDemo:'Load demo data', wipe:'Erase everything', exportCsv:'Export players (CSV)',
+    'qr.sub':"Scan a player's card to open their profile", 'qr.start':'Start camera', 'qr.stop':'Stop', 'qr.manual':'Or type the code', 'qr.unsupported':'Camera scanning is not supported in this browser. Use Chrome on Android, or type the code.', 'qr.card':'Player card', 'qr.notfound':'No player with this code',
+    saved:'Saved', deleted:'Deleted', alerts:'Alerts', noAlerts:'No alerts', expiring:'subscriptions expire within 2 days', expiredN:'expired subscriptions', noIns:'players without insurance', since:'since', in:'in', day:'d', profile:'Player profile', payments:'Payments', attendance30:'Attendance (30 d)', titles:'Titles', sessions:'sessions', total:'Total', noData:'No data', chooseFromList:'Pick a player from the list', wrongPass:'Wrong password', selectSport:'Choose…' },
+  ar: { 'login.title':'تسجيل الدخول','login.sub':'فضاء تسيير النادي','login.pass':'كلمة المرور','login.btn':'دخول', logout:'خروج', cancel:'إلغاء', save:'حفظ', delete:'حذف', add:'إضافة', edit:'تعديل', search:'بحث', all:'عرض الكل', confirm:'تأكيد',
+    'nav.dash':'لوحة التحكم','nav.players':'اللاعبون','nav.coaches':'المدربون','nav.subs':'الاشتراكات','nav.ins':'التأمين','nav.belt':'الحزام','nav.exams':'امتحانات الحزام','nav.att':'الحضور','nav.titles':'الألقاب','nav.fin':'المالية','nav.prices':'الأسعار','nav.settings':'الإعدادات','nav.qr':'قارئ QR',
+    'tile.players':'تسيير الأعضاء','tile.subs':'الأداءات والعد التنازلي','tile.ins':'حالة الرخص','tile.belt':'الدرجات والرتب','tile.fin':'المداخيل والمصاريف','tile.settings':'إعدادات النادي',
+    'd.belts':'توزيع الأحزمة','d.gender':'التوزيع حسب الجنس','d.cat':'التوزيع حسب الفئة','d.sport':'التوزيع حسب الرياضة','d.ins':'التأمين','d.subs':'حالة الاشتراكات','d.active':'اللاعبون النشطون حسب','d.byBelt':'الحزام','d.byGender':'الجنس','d.byCat':'الفئة','d.bySport':'الرياضة','d.byIns':'حالة التأمين','d.bySub':'الاشتراك', players:'لاعب',
+    male:'ذكر', female:'أنثى', kids:'أطفال', cadet:'فتيان', junior:'شبان', senior:'كبار', insured:'مؤمَّن', notInsured:'غير مؤمَّن', active:'نشط', soon:'ينتهي قريبا', expired:'منتهي', none:'بدون',
+    'sub.more2':'أكثر من يومين','sub.less2':'أقل من يومين','sub.exp':'اشتراك منتهي','sub.title':'تتبع الأداءات الشهرية', photo:'صورة', player:'اللاعب', belt:'الحزام', status:'الحالة', payDate:'تاريخ الأداء', countdown:'العد التنازلي', paid:'مؤدى', unpaid:'غير مؤدى', allSports:'كل الرياضات',
+    'p.new':'لاعب جديد','p.edit':'تعديل اللاعب', firstName:'الاسم', lastName:'النسب', birth:'تاريخ الازدياد', gender:'الجنس', phone:'الهاتف', parent:'الولي', sport:'الرياضة', coach:'المدرب', join:'تاريخ التسجيل', endDate:'نهاية الاشتراك', insDate:'التأمين (تاريخ)', cin:'ب.ت.و', licence:'رقم الرخصة', medical:'الشهادة الطبية', address:'العنوان', notes:'ملاحظات', archive:'أرشفة', unarchive:'إعادة تفعيل', archived:'مؤرشف', category:'الفئة', years:'سنة',
+    pay:'أداء', plan:'الصيغة', amount:'المبلغ (درهم)', date:'التاريخ', method:'الطريقة', cash:'نقدا', transfer:'تحويل', cheque:'شيك', mobile:'هاتف', note:'ملاحظة', newEnd:'نهاية الاشتراك الجديدة',
+    'c.new':'مدرب جديد', speciality:'التخصص', salary:'الأجر الشهري (درهم)', email:'البريد',
+    'ins.mark':'تسجيل التأمين', validUntil:'صالح إلى', 'ins.sub':'رخص وتأمين اللاعبين النشطين',
+    'belt.promote':'تغيير الحزام','belt.sub':'التوزيع والترقيات', promote:'ترقية', 'exam.new':'امتحان جديد', 'exam.sub':'دورات اجتياز الدرجات', candidates:'المترشحون', targetBelt:'الحزام المستهدف', pass:'ناجح', fail:'مؤجل', pending:'في الانتظار', result:'النتيجة', examiner:'الممتحن',
+    'att.sub':'ورقة الحضور لكل حصة', present:'حاضر',
+    't.new':'لقب جديد', competition:'المنافسة', rank:'النتيجة', 't.sub':'إنجازات اللاعبين', gold:'ذهب', silver:'فضة', bronze:'برونز', participation:'مشاركة',
+    revenue:'المداخيل', expenses:'المصاريف', balance:'الرصيد', 'fin.sub':'مداخيل ومصاريف الشهر', 'exp.new':'مصروف جديد', label:'البيان', categoryExp:'الفئة', rent:'الكراء', salaries:'الأجور', equipment:'المعدات', utilities:'الماء / الكهرباء', other:'أخرى', month:'الشهر', last6:'آخر 6 أشهر',
+    'prices.sub':'الصيغ والأسعار حسب الرياضة', months:'أشهر', price:'الثمن (درهم)', inscriptionFee:'رسوم التسجيل (درهم)', name:'الاسم', 'prices.add':'+ صيغة',
+    clubName:'اسم النادي', password:'كلمة مرور الدخول', sports:'الرياضات', 'sports.add':'+ رياضة', color:'اللون', data:'البيانات', 'data.sub':'نسخة تجريبية: البيانات محفوظة في هذا المتصفح على هذا الجهاز.', loadDemo:'تحميل بيانات تجريبية', wipe:'مسح الكل', exportCsv:'تصدير اللاعبين (CSV)',
+    'qr.sub':'امسح بطاقة اللاعب لفتح ملفه', 'qr.start':'تشغيل الكاميرا', 'qr.stop':'إيقاف', 'qr.manual':'أو أدخل الرمز يدويا', 'qr.unsupported':'المسح بالكاميرا غير مدعوم في هذا المتصفح. استعمل Chrome على Android أو أدخل الرمز.', 'qr.card':'بطاقة اللاعب', 'qr.notfound':'لا يوجد لاعب بهذا الرمز',
+    saved:'تم الحفظ', deleted:'تم الحذف', alerts:'تنبيهات', noAlerts:'لا تنبيهات', expiring:'اشتراكات تنتهي خلال يومين', expiredN:'اشتراكات منتهية', noIns:'لاعبون بدون تأمين', since:'منذ', in:'بعد', day:'ي', profile:'ملف اللاعب', payments:'الأداءات', attendance30:'الحضور (30 يوم)', titles:'الألقاب', sessions:'حصة', total:'المجموع', noData:'لا توجد بيانات', chooseFromList:'اختر لاعبا من اللائحة', wrongPass:'كلمة المرور غير صحيحة', selectSport:'اختر…' },
+};
+let LANG = 'fr'; try { LANG = localStorage.getItem('dojang.lang') || 'fr'; } catch (e) {}
+const t = k => (I18N[LANG] && I18N[LANG][k]) || I18N.fr[k] || k;
+function applyLang() {
+  document.documentElement.lang = LANG; document.documentElement.dir = LANG === 'ar' ? 'rtl' : 'ltr';
+  $$('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
+  $$('#langs button').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG));
+}
 
-  const S = { db:null, user:null, canWrite:true, members:[], payments:[], attendance:{}, config:structuredClone(DEFAULT_CONFIG), configLoaded:false, page:'dash', downloads:null };
+// ---------- Belts, sports, categories ----------
+const BELTS = [
+  { k:'white', fr:'Ceinture Blanche', en:'White Belt', ar:'حزام أبيض', bg:'#ffffff' },
+  { k:'white-yellow', fr:'Ceinture Blanc / Jaune', en:'White / Yellow Belt', ar:'أبيض / أصفر', bg:'#ffffff', stripe:'#facc15' },
+  { k:'yellow', fr:'Ceinture Jaune', en:'Yellow Belt', ar:'أصفر', bg:'#facc15' },
+  { k:'orange', fr:'Ceinture Orange', en:'Orange Belt', ar:'برتقالي', bg:'#f97316' },
+  { k:'green', fr:'Ceinture Verte', en:'Green Belt', ar:'أخضر', bg:'#22c55e' },
+  { k:'blue', fr:'Ceinture Bleue', en:'Blue Belt', ar:'أزرق', bg:'#3b82f6' },
+  { k:'blue-red', fr:'Ceinture Bleu / Rouge', en:'Blue / Red Belt', ar:'أزرق / أحمر', bg:'#3b82f6', stripe:'#ef4444' },
+  { k:'red', fr:'Ceinture Rouge', en:'Red Belt', ar:'أحمر', bg:'#ef4444' },
+  { k:'red-black', fr:'Ceinture Rouge / Noir', en:'Red / Black Belt', ar:'أحمر / أسود', bg:'#ef4444', stripe:'#000' },
+  { k:'red-2black', fr:'Ceinture Rouge / 2 Noir', en:'Red / 2 Black Belt', ar:'أحمر / أسودان', bg:'#ef4444', stripe:'#000', stripe2:true },
+  { k:'black', fr:'Ceinture Noire', en:'Black Belt', ar:'أسود', bg:'#111111' },
+];
+const beltName = i => { const b = BELTS[i]; return b ? (b[LANG] || b.fr) : t('none'); };
+const beltSw = (i, cls = 'sw') => { const b = BELTS[i]; if (!b) return `<span class="${cls}" style="background:#eee"></span>`; const st = b.stripe ? (b.stripe2 ? `<i style="background:${b.stripe};top:35%"></i><i style="background:${b.stripe};top:65%"></i>` : `<i style="background:${b.stripe}"></i>`) : ''; return `<span class="${cls}" style="background:${b.bg}">${st}</span>`; };
+const beltHtml = i => i == null || i === '' ? `<span class="pill n">${t('none')}</span>` : `<span class="belt">${beltSw(i)}${esc(beltName(i))}</span>`;
+const CATS = [['kids', 0, 11, '#f59e0b'], ['cadet', 12, 14, '#22c55e'], ['junior', 15, 17, '#3b82f6'], ['senior', 18, 200, '#ec4899']];
+const catOf = m => { const a = age(m.birthDate); if (a == null) return 'senior'; return (CATS.find(c => a >= c[1] && a <= c[2]) || CATS[3])[0]; };
+const DEFAULT_SETTINGS = {
+  clubName: 'Dojang Agadir', password: 'admin', inscriptionFee: 100,
+  sports: [ { id:'tkd', name:'Taekwondo', color:'#c0182f', belts:true }, { id:'kick', name:'Kickboxing', color:'#b45309', belts:false }, { id:'fit', name:'Fitness', color:'#3b82f6', belts:false }, { id:'aero', name:'Aérobic', color:'#10b981', belts:false } ],
+  plans: [ { id:'p1', sportId:'', name:'Mensuel', months:1, price:150 }, { id:'p3', sportId:'', name:'Trimestriel', months:3, price:400 }, { id:'p12', sportId:'', name:'Annuel', months:12, price:1400 }, { id:'pf', sportId:'fit', name:'Fitness mensuel', months:1, price:200 } ],
+};
 
-  // ---------- Status ----------
-  function status(m) {
-    if (m.archived) return { k:'off', t:'Archivé' };
-    if (!m.endDate) return { k:'bad', t:'Sans abonnement' };
-    const d = daysBetween(today(), m.endDate);
-    if (d < 0) return { k:'bad', t:`Expiré depuis ${-d} j` };
-    if (d <= 7) return { k:'warn', t: d === 0 ? "Expire aujourd'hui" : `Expire dans ${d} j` };
-    return { k:'ok', t:'Actif' };
-  }
-  const groupName = id => (S.config.groups.find(g => g.id === id) || {}).name || '—';
-  const planName = id => (S.config.plans.find(p => p.id === id) || {}).name || '—';
-  const fullName = m => `${m.lastName || ''} ${m.firstName || ''}`.trim();
-  const beltHtml = i => { const b = BELTS[i]; return b ? `<span class="belt"><i style="background:${b[2]}"></i>${esc(b[1])}</span>` : '—'; };
-  const medStatus = m => { if (!m.medicalDate) return 'none'; const d = daysBetween(today(), addMonths(m.medicalDate, 12)); return d < 0 ? 'expired' : d <= 30 ? 'soon' : 'ok'; };
+// ---------- Store (this browser) ----------
+const KEY = 'dojang.v2';
+const EMPTY = () => ({ settings: structuredClone(DEFAULT_SETTINGS), members: {}, coaches: {}, payments: {}, expenses: {}, attendance: {}, exams: {}, titles: {} });
+let D = EMPTY();
+function load() { try { const r = localStorage.getItem(KEY); if (r) { D = { ...EMPTY(), ...JSON.parse(r) }; D.settings = { ...structuredClone(DEFAULT_SETTINGS), ...D.settings }; return true; } } catch (e) {} return false; }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) { toast('Stockage indisponible'); } render(); }
+const sportOf = id => D.settings.sports.find(s => s.id === id);
+const sportName = id => (sportOf(id) || {}).name || '—';
+const sportColor = id => (sportOf(id) || {}).color || '#64748b';
+const coachName = id => { const c = D.coaches[id]; return c ? fullName(c) : '—'; };
+const members = () => Object.values(D.members);
+const activeM = () => members().filter(m => !m.archived);
+const subState = m => { if (!m.endDate) return { k:'expired', d:null }; const d = days(today(), m.endDate); return { k: d < 0 ? 'expired' : d <= 2 ? 'soon' : 'active', d }; };
+const insState = m => { if (!m.insuranceDate) return false; return days(today(), addMonths(m.insuranceDate, 12)) >= 0; };
+const paidThisMonth = m => !!m.endDate && m.endDate >= today();
+const lastPay = m => Object.values(D.payments).filter(p => p.memberId === m.id).sort((a, b) => a.date < b.date ? 1 : -1)[0];
 
-  // ---------- Navigation ----------
-  const NAV = [
-    ['dash', 'Tableau de bord', '<path d="M3 13h8V3H3zm10 8h8v-6h-8zM3 21h8v-6H3zm10-18v8h8V3z"/>'],
-    ['members', 'Adhérents', '<path d="M16 11a4 4 0 1 0-8 0 4 4 0 0 0 8 0zm-4 6c-4 0-8 2-8 4v1h16v-1c0-2-4-4-8-4z"/>'],
-    ['attn', 'Présences', '<path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/>'],
-    ['pay', 'Paiements', '<path d="M3 6h18v12H3zm9 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>'],
-    ['settings', 'Paramètres', '<path d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3H9l-.4 2.9a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L4.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L9 21h6l.4-2.9a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/>'],
-  ];
-  const icon = p => `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${p}</svg>`;
-  const rail = $('#rail'), tabbar = $('#tabbar');
-  NAV.forEach(([id, label, p]) => {
-    const b = document.createElement('button'); b.innerHTML = icon(p) + `<span>${label}</span>`; b.dataset.page = id; b.addEventListener('click', () => go(id));
-    rail.insertBefore(b, rail.querySelector('.spacer'));
-    const t = b.cloneNode(true); t.addEventListener('click', () => go(id)); tabbar.appendChild(t);
+// ---------- UI primitives ----------
+let toastT; function toast(msg) { const el = $('#toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 2400); }
+function confirmBox(title, text, yes) { return new Promise(res => { const d = $('#dlgConfirm'); $('#cTitle').textContent = title; $('#cText').textContent = text; $('#cYes').textContent = yes || t('confirm'); d.returnValue = 'no'; d.showModal(); d.addEventListener('close', () => res(d.returnValue === 'yes'), { once: true }); }); }
+function modal(html, onReady) { const d = $('#dlg'); $('#dlgBody').innerHTML = html; $$('[data-close]', d).forEach(b => b.addEventListener('click', () => d.close())); if (onReady) onReady(d); d.showModal(); }
+const closeModal = () => $('#dlg').close();
+const icon = {
+  dash: '<path d="M3 13h8V3H3zm10 8h8v-6h-8zM3 21h8v-6H3zm10-18v8h8V3z"/>', players: '<path d="M16 11a4 4 0 1 0-8 0 4 4 0 0 0 8 0zm-4 6c-4 0-8 2-8 4v1h16v-1c0-2-4-4-8-4z"/>', coaches: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-7 9v-1c0-3 4-5 7-5s7 2 7 5v1zm13-14 2 2 4-4-1-1-3 3-1-1z"/>', subs: '<path d="M3 6h18v12H3zm2 2v2h14V8zm0 5v3h6v-3z"/>', ins: '<path d="M12 2 4 5v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V5zm0 6 1.2 2.4 2.6.4-1.9 1.8.5 2.6L12 14l-2.4 1.2.5-2.6-1.9-1.8 2.6-.4z"/>', belt: '<path d="M4 9h16v6H4zm2 2v2h12v-2zm4-7h4l1 3h-6zm-1 13h6l-1 3h-4z"/>', exams: '<path d="M6 2h9l5 5v15H6zm8 1v5h5zM8 12h8v2H8zm0 4h8v2H8z"/>', att: '<path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/>', titles: '<path d="M5 3h14v3h3v3a5 5 0 0 1-4 4.9A6 6 0 0 1 13 17v2h3v2H8v-2h3v-2a6 6 0 0 1-5-3.1A5 5 0 0 1 2 9V6h3zM5 8H4v1a3 3 0 0 0 1.5 2.6zM19 8v3.6A3 3 0 0 0 20 9V8z"/>', fin: '<path d="M12 3c-2 2-4 3-6 3v7c0 4 3 7 6 8 3-1 6-4 6-8V6c-2 0-4-1-6-3zm1 14h-2v-1c-1.2-.2-2-1-2-2h1.6c0 .4.5.8 1.4.8s1.3-.3 1.3-.7c0-.5-.6-.7-1.6-1C10.5 12.8 9 12.4 9 10.9c0-1 .8-1.7 2-1.9V8h2v1c1 .2 1.8.9 1.8 1.9h-1.6c0-.4-.4-.7-1.2-.7s-1.1.3-1.1.6c0 .5.7.7 1.6 1 1.5.4 2.5.9 2.5 2.3 0 1-.8 1.7-2 1.9z"/>', prices: '<path d="M21 11 11 1H3v8l10 10zM6 7a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>', settings: '<path d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3H9l-.4 2.9a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L4.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L9 21h6l.4-2.9a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/>', qr: '<path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm8-2h3v3h-3zm5 0h3v3h-3zm-5 5h3v3h-3zm5 0h3v3h-3z"/>',
+};
+const svg = (k, extra = '') => `<svg viewBox="0 0 24 24" fill="currentColor" ${extra}>${icon[k]}</svg>`;
+const NAV = [['dash', 'nav.dash'], ['players', 'nav.players'], ['coaches', 'nav.coaches'], ['subs', 'nav.subs'], ['ins', 'nav.ins'], ['belt', 'nav.belt'], ['exams', 'nav.exams'], ['att', 'nav.att'], ['titles', 'nav.titles'], ['fin', 'nav.fin'], ['prices', 'nav.prices'], ['settings', 'nav.settings'], ['qr', 'nav.qr']];
+const FLAGS = { en: '<svg viewBox="0 0 60 40"><rect width="60" height="40" fill="#012169"/><path d="M0 0l60 40M60 0L0 40" stroke="#fff" stroke-width="7"/><path d="M0 0l60 40M60 0L0 40" stroke="#C8102E" stroke-width="3"/><path d="M30 0v40M0 20h60" stroke="#fff" stroke-width="11"/><path d="M30 0v40M0 20h60" stroke="#C8102E" stroke-width="6"/></svg>', fr: '<svg viewBox="0 0 60 40"><rect width="20" height="40" fill="#0055A4"/><rect x="20" width="20" height="40" fill="#fff"/><rect x="40" width="20" height="40" fill="#EF4135"/></svg>', ar: '<svg viewBox="0 0 60 40"><rect width="60" height="40" fill="#C1272D"/><path d="M30 10l3 9h9l-7.5 5.5 3 9L30 28l-7.5 5.5 3-9L18 19h9z" fill="none" stroke="#006233" stroke-width="2"/></svg>' };
+
+// ---------- Pages ----------
+let PAGE = 'dash', filters = { sport: '', q: '', status: '', subFilter: 'all', finMonth: today().slice(0, 7), attDate: today(), attSport: '' };
+const P = {};
+function page(id) { PAGE = id; try { localStorage.setItem('dojang.page', id); } catch (e) {} $('#side').classList.remove('open'); $('#scrim').classList.remove('open'); render(); window.scrollTo(0, 0); }
+function render() {
+  if ($('#app').hidden) return;
+  applyLang();
+  $('#sideClub').textContent = $('#loginClub').textContent = D.settings.clubName; document.title = D.settings.clubName;
+  $('#nav').innerHTML = NAV.map(([id, k]) => `<button data-p="${id}" ${PAGE === id ? 'aria-current="page"' : ''}>${svg(id)}<span>${esc(t(k))}</span></button>`).join('');
+  $$('#nav button').forEach(b => b.addEventListener('click', () => page(b.dataset.p)));
+  const nav = NAV.find(n => n[0] === PAGE); $('#topIcon').innerHTML = svg(PAGE); $('#topTitle').textContent = t(nav[1]);
+  const al = alerts(); $('#bellN').hidden = !al.n; $('#bellN').textContent = al.n > 99 ? '99+' : al.n;
+  $('#main').innerHTML = P[PAGE]();
+  (P[PAGE + '_wire'] || (() => {}))();
+}
+function alerts() { const a = activeM(); const soon = a.filter(m => subState(m).k === 'soon').length, exp = a.filter(m => subState(m).k === 'expired').length, noIns = a.filter(m => !insState(m)).length; return { n: soon + exp, soon, exp, noIns }; }
+$('#bell').addEventListener('click', () => { const a = alerts(); modal(`<div class="body"><h2>${t('alerts')}</h2>${a.n || a.noIns ? `<ul style="margin:0;padding-inline-start:18px;line-height:2">${a.soon ? `<li><b>${a.soon}</b> ${t('expiring')}</li>` : ''}${a.exp ? `<li><b>${a.exp}</b> ${t('expiredN')}</li>` : ''}${a.noIns ? `<li><b>${a.noIns}</b> ${t('noIns')}</li>` : ''}</ul>` : `<p>${t('noAlerts')}</p>`}<div class="ff"><div class="right"><button class="btn" data-close>OK</button></div></div></div>`); });
+
+// Donut helper
+function donut(parts, total) { let acc = 0; const stops = parts.filter(p => p.v > 0).map(p => { const s = acc / total * 360; acc += p.v; return `${p.c} ${s}deg ${acc / total * 360}deg`; }); const bg = stops.length ? `conic-gradient(${stops.join(',')})` : '#e5e7eb'; return `<div class="donut" style="background:${bg}"><div class="c"><b>${total}</b><small>${t('players')}</small></div></div>`; }
+const legend = (parts, total) => `<div class="legend">${parts.map(p => `<span><i style="background:${p.c}"></i>${esc(p.l)} ${total ? Math.round(p.v / total * 100) : 0}% (${p.v})</span>`).join('')}</div>`;
+const dcard = (title, by, parts, total) => `<div class="card"><h3>${t(title)}</h3><div class="sub">${t('d.active')} ${t(by)}</div>${legend(parts, total)}${donut(parts, total)}</div>`;
+
+P.dash = () => {
+  const a = activeM(), n = a.length;
+  const tiles = [['players', 'nav.players', 'tile.players', '#6d5dfc'], ['subs', 'nav.subs', 'tile.subs', '#22c55e'], ['ins', 'nav.ins', 'tile.ins', '#f59e0b'], ['belt', 'nav.belt', 'tile.belt', '#0ea5e9'], ['fin', 'nav.fin', 'tile.fin', '#10b981'], ['settings', 'nav.settings', 'tile.settings', '#64748b']];
+  const beltRows = BELTS.map((b, i) => { const c = a.filter(m => m.belt === i).length; return `<div class="r">${beltSw(i, 'sw' + (b.k === 'black' ? ' black' : ''))}<span class="lb">${esc(b[LANG] || b.fr)}</span>${beltSw(i, 'mini')}<b>${c}</b></div>`; }).join('');
+  const g = [{ l: t('male'), v: a.filter(m => m.sex === 'M').length, c: '#3b82f6' }, { l: t('female'), v: a.filter(m => m.sex === 'F').length, c: '#ec4899' }];
+  const cats = CATS.map(c => ({ l: t(c[0]), v: a.filter(m => catOf(m) === c[0]).length, c: c[3] }));
+  const sp = D.settings.sports.map(s => ({ l: s.name, v: a.filter(m => m.sportId === s.id).length, c: s.color }));
+  const ins = [{ l: '✓ ' + t('insured'), v: a.filter(insState).length, c: '#22c55e' }, { l: '✗ ' + t('notInsured'), v: a.filter(m => !insState(m)).length, c: '#ef4444' }];
+  const sub = [{ l: t('active'), v: a.filter(m => subState(m).k === 'active').length, c: '#22c55e' }, { l: t('soon'), v: a.filter(m => subState(m).k === 'soon').length, c: '#f59e0b' }, { l: t('expired'), v: a.filter(m => subState(m).k === 'expired').length, c: '#ef4444' }];
+  return `<div class="tiles">${tiles.map(([p, k, s, c]) => `<button class="tile" data-go="${p}"><span class="ic" style="background:${c}">${svg(p)}</span><span><b>${t(k)}</b><small>${t(s)}</small></span></button>`).join('')}</div>
+  <div class="grid">
+    <div class="card"><h3>${t('d.belts')}</h3><div class="sub">${t('d.active')} ${t('d.byBelt')}</div><div class="beltlist">${beltRows}</div></div>
+    ${dcard('d.gender', 'd.byGender', g, n)}${dcard('d.cat', 'd.byCat', cats, n)}${dcard('d.sport', 'd.bySport', sp, n)}${dcard('d.ins', 'd.byIns', ins, n)}${dcard('d.subs', 'd.bySub', sub, n)}
+  </div>`;
+};
+P.dash_wire = () => $$('[data-go]').forEach(b => b.addEventListener('click', () => page(b.dataset.go)));
+
+const sportSelect = (id, val, allLabel) => `<select id="${id}">${allLabel ? `<option value="">${allLabel}</option>` : ''}${D.settings.sports.map(s => `<option value="${s.id}" ${s.id === val ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select>`;
+
+P.players = () => {
+  let rows = members().filter(m => filters.status === 'archived' ? m.archived : !m.archived);
+  if (filters.sport) rows = rows.filter(m => m.sportId === filters.sport);
+  if (filters.status && filters.status !== 'archived') rows = rows.filter(m => subState(m).k === filters.status);
+  if (filters.q) rows = rows.filter(m => (fullName(m) + ' ' + (m.phone || '') + ' ' + (m.parentContact || '') + ' ' + m.id).toLowerCase().includes(filters.q.toLowerCase()));
+  rows.sort((a, b) => fullName(a).localeCompare(fullName(b), 'fr'));
+  return `<div class="ph"><div><h2>${t('nav.players')}</h2><p>${rows.length} / ${activeM().length}</p></div><div class="actions"><button class="btn" id="exportCsv">${t('exportCsv')}</button><button class="btn p" id="newM">+ ${t('p.new')}</button></div></div>
+  <div class="toolbar"><input class="grow" type="search" id="q" value="${esc(filters.q)}" placeholder="${t('search')}…">${sportSelect('fSport', filters.sport, t('allSports'))}<select id="fStatus"><option value="">${t('all')}</option><option value="active" ${filters.status === 'active' ? 'selected' : ''}>${t('active')}</option><option value="soon" ${filters.status === 'soon' ? 'selected' : ''}>${t('soon')}</option><option value="expired" ${filters.status === 'expired' ? 'selected' : ''}>${t('expired')}</option><option value="archived" ${filters.status === 'archived' ? 'selected' : ''}>${t('archived')}</option></select></div>
+  <div class="tw"><table><thead><tr><th>${t('photo')}</th><th>${t('player')}</th><th>${t('sport')}</th><th>${t('category')}</th><th>${t('belt')}</th><th>${t('phone')}</th><th>${t('endDate')}</th><th>${t('status')}</th></tr></thead><tbody>
+  ${rows.map(m => { const s = subState(m); return `<tr class="click" data-id="${m.id}"><td><span class="av">${esc(initials(m))}</span></td><td><b>${esc(fullName(m))}</b>${age(m.birthDate) != null ? `<br><small style="color:var(--muted)">${age(m.birthDate)} ${t('years')}</small>` : ''}</td><td><span class="pill" style="background:${sportColor(m.sportId)}22;color:${sportColor(m.sportId)}">${esc(sportName(m.sportId))}</span></td><td>${t(catOf(m))}</td><td>${beltHtml(m.belt)}</td><td>${esc(m.phone || m.parentContact || '—')}</td><td>${fmtD(m.endDate)}</td><td><span class="pill ${s.k === 'active' ? 'g' : s.k === 'soon' ? 'a' : 'r'}">${t(s.k)}</span></td></tr>`; }).join('')}
+  </tbody></table>${rows.length ? '' : `<div class="empty">${t('noData')}</div>`}</div>`;
+};
+P.players_wire = () => {
+  $('#q').addEventListener('input', e => { filters.q = e.target.value; render(); $('#q').focus(); const v = $('#q').value; $('#q').setSelectionRange(v.length, v.length); });
+  $('#fSport').addEventListener('change', e => { filters.sport = e.target.value; render(); });
+  $('#fStatus').addEventListener('change', e => { filters.status = e.target.value; render(); });
+  $('#newM').addEventListener('click', () => memberForm(null));
+  $('#exportCsv').addEventListener('click', exportCsv);
+  $$('tr[data-id]').forEach(r => r.addEventListener('click', () => profile(r.dataset.id)));
+};
+function memberForm(m) {
+  const f = (id, label, input) => `<div class="f"><label for="${id}">${label}</label>${input}</div>`;
+  const inp = (id, type = 'text', val = '', extra = '') => `<input id="${id}" type="${type}" value="${esc(val)}" ${extra}>`;
+  modal(`<form id="mf"><h2>${m ? t('p.edit') : t('p.new')}</h2><div class="fields">
+    ${f('mLast', t('lastName') + ' *', inp('mLast', 'text', m?.lastName, 'required'))}${f('mFirst', t('firstName') + ' *', inp('mFirst', 'text', m?.firstName, 'required'))}
+    ${f('mBirth', t('birth'), inp('mBirth', 'date', m?.birthDate))}${f('mSex', t('gender'), `<select id="mSex"><option value="M" ${m?.sex === 'M' ? 'selected' : ''}>${t('male')}</option><option value="F" ${m?.sex === 'F' ? 'selected' : ''}>${t('female')}</option></select>`)}
+    ${f('mPhone', t('phone'), inp('mPhone', 'tel', m?.phone))}${f('mParent', t('parent'), inp('mParent', 'text', m?.parentContact))}
+    ${f('mSport', t('sport') + ' *', sportSelect('mSport', m?.sportId || D.settings.sports[0]?.id))}${f('mCoach', t('coach'), `<select id="mCoach"><option value="">—</option>${Object.values(D.coaches).map(c => `<option value="${c.id}" ${m?.coachId === c.id ? 'selected' : ''}>${esc(fullName(c))}</option>`).join('')}</select>`)}
+    ${f('mBelt', t('belt'), `<select id="mBelt"><option value="">${t('none')}</option>${BELTS.map((b, i) => `<option value="${i}" ${m?.belt === i ? 'selected' : ''}>${esc(b[LANG] || b.fr)}</option>`).join('')}</select>`)}${f('mJoin', t('join'), inp('mJoin', 'date', m?.joinDate || today()))}
+    ${f('mEnd', t('endDate'), inp('mEnd', 'date', m?.endDate))}${f('mIns', t('insDate'), inp('mIns', 'date', m?.insuranceDate))}
+    ${f('mCin', t('cin'), inp('mCin', 'text', m?.cin))}${f('mLic', t('licence'), inp('mLic', 'text', m?.licence))}
+    ${f('mMed', t('medical'), inp('mMed', 'date', m?.medicalDate))}${f('mAddr', t('address'), inp('mAddr', 'text', m?.address))}
+    <div class="f full"><label for="mNotes">${t('notes')}</label><textarea id="mNotes" rows="2">${esc(m?.notes)}</textarea></div></div>
+    <div class="ff">${m ? `<button type="button" class="btn" id="mArch">${m.archived ? t('unarchive') : t('archive')}</button>` : '<span></span>'}<div class="right"><button type="button" class="btn" data-close>${t('cancel')}</button><button class="btn p">${t('save')}</button></div></div></form>`, d => {
+    $('#mf').addEventListener('submit', ev => { ev.preventDefault(); const id = m?.id || uid('m'); D.members[id] = { ...(m || {}), id, lastName: $('#mLast').value.trim(), firstName: $('#mFirst').value.trim(), birthDate: $('#mBirth').value, sex: $('#mSex').value, phone: $('#mPhone').value.trim(), parentContact: $('#mParent').value.trim(), sportId: $('#mSport').value, coachId: $('#mCoach').value, belt: $('#mBelt').value === '' ? null : +$('#mBelt').value, joinDate: $('#mJoin').value, endDate: $('#mEnd').value, insuranceDate: $('#mIns').value, cin: $('#mCin').value.trim(), licence: $('#mLic').value.trim(), medicalDate: $('#mMed').value, address: $('#mAddr').value.trim(), notes: $('#mNotes').value.trim(), archived: !!m?.archived, createdAt: m?.createdAt || today() }; closeModal(); save(); toast(t('saved')); });
+    if (m) $('#mArch').addEventListener('click', async () => { if (!m.archived && !await confirmBox(t('archive') + ' ?', fullName(m), t('archive'))) return; D.members[m.id].archived = !m.archived; closeModal(); save(); });
   });
-  function go(id) {
-    S.page = id;
-    $$('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
-    $$('[data-page]').forEach(b => { if (b.dataset.page === id) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
-    try { localStorage.setItem('dojang.page', id); } catch (e) {}
-    render();
-    window.scrollTo(0, 0);
-  }
-  let startPage = 'dash';
-  try { const h = location.hash.replace('#',''); if (NAV.some(n => n[0] === h)) startPage = h; else { const p = localStorage.getItem('dojang.page'); if (p && NAV.some(n => n[0] === p)) startPage = p; } } catch (e) {}
-
-  // ---------- Toast / confirm ----------
-  let toastT; function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2400); }
-  function confirmBox(title, text, yesLabel = 'Confirmer') {
-    return new Promise(res => { const d = $('#dlgConfirm'); $('#confirmTitle').textContent = title; $('#confirmText').textContent = text; $('#confirmYes').textContent = yesLabel; d.returnValue = 'no'; d.showModal(); d.addEventListener('close', () => res(d.returnValue === 'yes'), { once: true }); });
-  }
-  function dbError(e, what) { console.error(e); const c = e && e.code; toast(c === 'invalid_argument' ? `Impossible d'enregistrer (${what}) : droits insuffisants.` : c === 'quota_exceeded' ? 'Espace de stockage plein.' : `Erreur lors de ${what}. Réessayez.`); }
-
-  // ---------- Render ----------
-  function render() {
-    $('#brandName').textContent = S.config.clubName || 'Dojang Agadir';
-    document.title = S.config.clubName || 'Dojang Agadir';
-    const t = new Date(); $('#todayLabel').textContent = t.toLocaleDateString('fr-MA', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-    fillGroupSelects();
-    if (S.page === 'dash') renderDash();
-    if (S.page === 'members') renderMembers();
-    if (S.page === 'attn') renderAttendance();
-    if (S.page === 'pay') renderPayments();
-    if (S.page === 'settings') renderSettings();
-    $$('[data-open]').forEach(b => b.disabled = !S.canWrite);
-  }
-
-  function fillGroupSelects() {
-    const opts = S.config.groups.map(g => `<option value="${esc(g.id)}">${esc(g.name)}</option>`).join('');
-    for (const [sel, first] of [['#fGroup', '<option value="">Tous les groupes</option>'], ['#aGroup', ''], ['#mGroup', '<option value="">Choisir…</option>']]) {
-      const el = $(sel); const v = el.value; el.innerHTML = first + opts; if ([...el.options].some(o => o.value === v)) el.value = v;
-    }
-    $('#pPlan').innerHTML = S.config.plans.map(p => `<option value="${esc(p.id)}">${esc(p.name)} — ${fmtDH(p.price)} (${p.months} mois)</option>`).join('');
-    if (!$('#mBelt').options.length) $('#mBelt').innerHTML = BELTS.map((b, i) => `<option value="${i}">${b[1]} · ${b[0]}</option>`).join('');
-  }
-
-  function renderDash() {
-    const act = S.members.filter(m => !m.archived);
-    const st = act.map(m => ({ m, s: status(m) }));
-    const n = k => st.filter(x => x.s.k === k).length;
-    const tm = today().slice(0, 7);
-    const monthTotal = S.payments.filter(p => (p.date || '').startsWith(tm)).reduce((a, p) => a + (+p.amount || 0), 0);
-    const presentToday = Object.values(S.attendance).filter(a => a.date === today()).reduce((a, d) => a + (d.present || []).length, 0);
-    $('#kpis').innerHTML = [
-      ['', 'Adhérents actifs', n('ok') + n('warn')], ['warn', 'Expirent sous 7 j', n('warn')], ['bad', 'Expirés / à relancer', n('bad')],
-      ['ok', 'Encaissé ce mois', `${Math.round(monthTotal).toLocaleString('fr-MA')}<small>DH</small>`], ['', "Présents aujourd'hui", presentToday],
-    ].map(([k, l, v]) => `<div class="kpi ${k}"><div class="label">${l}</div><div class="num">${v}</div></div>`).join('');
-
-    const rowHtml = (m, meta) => `<div class="row" data-id="${esc(m.id)}"><div><div class="name">${esc(fullName(m))}</div><div class="meta">${esc(groupName(m.groupId))}${m.phone ? ' · ' + esc(m.phone) : ''}</div></div><div class="meta">${meta}</div></div>`;
-    const relance = st.filter(x => x.s.k === 'bad').sort((a, b) => (a.m.endDate || '') < (b.m.endDate || '') ? -1 : 1);
-    $('#listRelance').innerHTML = relance.length ? relance.slice(0, 12).map(x => rowHtml(x.m, esc(x.s.t))).join('') : '<div class="empty">Personne à relancer.</div>';
-    $('#cRelance').textContent = relance.length || '';
-    const soon = st.filter(x => x.s.k === 'warn').sort((a, b) => a.m.endDate < b.m.endDate ? -1 : 1);
-    $('#listSoon').innerHTML = soon.length ? soon.map(x => rowHtml(x.m, esc(x.s.t))).join('') : '<div class="empty">Aucune expiration cette semaine.</div>';
-    $('#cSoon').textContent = soon.length || '';
-    const med = act.filter(m => { const s = medStatus(m); return s === 'expired' || s === 'soon' || s === 'none'; }).sort((a, b) => (a.medicalDate || '') < (b.medicalDate || '') ? -1 : 1);
-    $('#listMed').innerHTML = med.length ? med.slice(0, 12).map(m => rowHtml(m, m.medicalDate ? 'Valable jusqu\'au ' + fmtDate(addMonths(m.medicalDate, 12)) : 'Aucun certificat')).join('') : '<div class="empty">Tous les certificats sont à jour.</div>';
-    $('#cMed').textContent = med.length || '';
-    $$('#page-dash .row').forEach(r => r.addEventListener('click', () => openDrawer(r.dataset.id)));
-
-    // 6-month chart
-    const months = []; const d = new Date(); d.setDate(1);
-    for (let i = 5; i >= 0; i--) { const x = new Date(d.getFullYear(), d.getMonth() - i, 1); months.push({ key: `${x.getFullYear()}-${pad(x.getMonth()+1)}`, label: x.toLocaleDateString('fr-MA', { month:'short' }) }); }
-    months.forEach(mo => mo.total = S.payments.filter(p => (p.date || '').startsWith(mo.key)).reduce((a, p) => a + (+p.amount || 0), 0));
-    const max = Math.max(1, ...months.map(m => m.total));
-    $('#chart').innerHTML = months.map(mo => `<div class="b ${mo.key === tm ? 'cur' : ''}"><div class="v">${Math.round(mo.total).toLocaleString('fr-MA')}</div><div class="bar" style="height:${Math.round(mo.total / max * 100)}%"></div><div class="l">${esc(mo.label)}</div></div>`).join('');
-  }
-
-  function renderMembers() {
-    const q = ($('#q').value || '').toLowerCase().trim(), g = $('#fGroup').value, f = $('#fStatus').value;
-    let rows = S.members.filter(m => f === 'off' ? m.archived : !m.archived);
-    if (g) rows = rows.filter(m => m.groupId === g);
-    if (f && f !== 'off') rows = rows.filter(m => status(m).k === f);
-    if (q) rows = rows.filter(m => (fullName(m) + ' ' + (m.phone || '') + ' ' + (m.parentContact || '')).toLowerCase().includes(q));
-    rows.sort((a, b) => fullName(a).localeCompare(fullName(b), 'fr'));
-    $('#memberRows').innerHTML = rows.map(m => { const s = status(m); return `<tr tabindex="0" data-id="${esc(m.id)}"><td><strong>${esc(m.lastName)}</strong> ${esc(m.firstName)}${age(m.birthDate) != null ? ` <span style="color:var(--muted)">· ${age(m.birthDate)} ans</span>` : ''}</td><td>${esc(groupName(m.groupId))}</td><td>${beltHtml(m.belt)}</td><td>${esc(m.phone || m.parentContact || '—')}</td><td>${esc(planName(m.planId))}</td><td>${fmtDate(m.endDate)}</td><td><span class="pill ${s.k}">${esc(s.t)}</span></td></tr>`; }).join('');
-    const e = $('#memberEmpty'); e.hidden = rows.length > 0;
-    e.textContent = S.members.length ? 'Aucun adhérent ne correspond à cette recherche.' : 'Aucun adhérent pour le moment. Cliquez sur « Nouvel adhérent » pour créer la première fiche.';
-    $$('#memberRows tr').forEach(r => { r.addEventListener('click', () => openDrawer(r.dataset.id)); r.addEventListener('keydown', ev => { if (ev.key === 'Enter') openDrawer(r.dataset.id); }); });
-  }
-
-  function attnKey() { return `${$('#aDate').value}_${$('#aGroup').value}`; }
-  function renderAttendance() {
-    if (!$('#aDate').value) $('#aDate').value = today();
-    const g = $('#aGroup').value; const date = $('#aDate').value;
-    const grp = S.config.groups.find(x => x.id === g);
-    const doc = S.attendance[attnKey()] || { present: [] };
-    const present = new Set(doc.present || []);
-    const list = S.members.filter(m => !m.archived && m.groupId === g).sort((a, b) => fullName(a).localeCompare(fullName(b), 'fr'));
-    $('#attnList').innerHTML = list.map(m => { const s = status(m); const on = present.has(m.id); return `<label class="${on ? 'on' : ''} ${s.k === 'bad' ? 'exp' : ''}"><input type="checkbox" data-id="${esc(m.id)}" ${on ? 'checked' : ''} ${S.canWrite ? '' : 'disabled'}><span><div class="n">${esc(fullName(m))}</div><div class="m">${s.k === 'bad' ? '⚠ ' + esc(s.t) : esc(BELTS[m.belt] ? BELTS[m.belt][1] : '')}</div></span></label>`; }).join('');
-    $('#aCount').textContent = list.length ? `${present.size} / ${list.length} présents${grp && grp.schedule ? ' · ' + grp.schedule : ''}` : '';
-    const e = $('#attnEmpty'); e.hidden = list.length > 0; e.textContent = S.config.groups.length ? 'Aucun adhérent actif dans ce groupe.' : 'Créez d\'abord des groupes dans Paramètres.';
-    $$('#attnList input').forEach(cb => cb.addEventListener('change', () => toggleAttendance(cb.dataset.id, cb.checked)));
-  }
-  let attnTimer;
-  async function toggleAttendance(id, on) {
-    const key = attnKey(); const cur = S.attendance[key] || { date: $('#aDate').value, groupId: $('#aGroup').value, present: [] };
-    const set = new Set(cur.present || []); on ? set.add(id) : set.delete(id);
-    S.attendance[key] = { ...cur, present: [...set] }; renderAttendance();
-    clearTimeout(attnTimer);
-    attnTimer = setTimeout(async () => { if (!S.db) return; const body = { ...S.attendance[key], updatedAt: new Date().toISOString() }; try { await S.db.doc('attendance/' + key).set(body); } catch (e) { dbError(e, 'l\'appel'); } }, 500);
-  }
-
-  function renderPayments() {
-    if (!$('#pMonth').value) $('#pMonth').value = today().slice(0, 7);
-    const mo = $('#pMonth').value, q = ($('#pq').value || '').toLowerCase().trim();
-    const byId = Object.fromEntries(S.members.map(m => [m.id, m]));
-    let rows = S.payments.filter(p => (p.date || '').startsWith(mo));
-    if (q) rows = rows.filter(p => (p.memberName || '').toLowerCase().includes(q));
-    rows.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
-    const total = rows.reduce((a, p) => a + (+p.amount || 0), 0);
-    const byMethod = {}; rows.forEach(p => byMethod[p.method || 'Espèces'] = (byMethod[p.method || 'Espèces'] || 0) + (+p.amount || 0));
-    $('#payKpis').innerHTML = [['ok', 'Total du mois', `${Math.round(total).toLocaleString('fr-MA')}<small>DH</small>`], ['', 'Paiements', rows.length], ...Object.entries(byMethod).map(([k, v]) => ['', k, `${Math.round(v).toLocaleString('fr-MA')}<small>DH</small>`])]
-      .map(([k, l, v]) => `<div class="kpi ${k}"><div class="label">${esc(l)}</div><div class="num">${v}</div></div>`).join('');
-    $('#payRows').innerHTML = rows.map(p => `<tr data-id="${esc(p.memberId)}"><td>${fmtDate(p.date)}</td><td><strong>${esc(p.memberName || (byId[p.memberId] ? fullName(byId[p.memberId]) : '—'))}</strong></td><td>${esc(p.planName || planName(p.planId))}</td><td>${esc(p.method || '')}</td><td class="num">${fmtDH(p.amount)}</td><td style="white-space:normal;color:var(--muted)">${esc(p.note || '')}</td><td>${S.canWrite ? `<button class="btn sm danger" data-del="${esc(p.id)}">Supprimer</button>` : ''}</td></tr>`).join('');
-    const e = $('#payEmpty'); e.hidden = rows.length > 0; e.textContent = 'Aucun paiement ce mois-ci.';
-    $$('#payRows tr').forEach(r => r.addEventListener('click', ev => { if (ev.target.closest('[data-del]')) return; if (byId[r.dataset.id]) openDrawer(r.dataset.id); }));
-    $$('#payRows [data-del]').forEach(b => b.addEventListener('click', async () => { if (!await confirmBox('Supprimer ce paiement ?', 'La date de fin d\'abonnement de l\'adhérent ne sera pas recalculée.', 'Supprimer')) return; try { await S.db.doc('payments/' + b.dataset.del).delete(); toast('Paiement supprimé'); } catch (e) { dbError(e, 'la suppression'); } }));
-  }
-
-  function renderSettings() {
-    const c = S.config;
-    $('#sName').value = c.clubName || ''; $('#sFee').value = c.inscriptionFee ?? 0; $('#sPhone').value = c.phone || '';
-    $('#plansList').innerHTML = c.plans.map((p, i) => `<div class="item" data-i="${i}"><input value="${esc(p.name)}" placeholder="Nom" aria-label="Nom de la formule" data-k="name"><input type="number" min="1" value="${p.months}" placeholder="Mois" aria-label="Durée en mois" data-k="months"><input type="number" min="0" value="${p.price}" placeholder="DH" aria-label="Prix" data-k="price"><button type="button" class="btn sm" data-rm="plan" aria-label="Retirer">✕</button></div>`).join('');
-    $('#groupsList').innerHTML = c.groups.map((g, i) => `<div class="item g" data-i="${i}"><input value="${esc(g.name)}" placeholder="Nom du groupe" aria-label="Nom du groupe" data-k="name"><input value="${esc(g.schedule || '')}" placeholder="Horaires" aria-label="Horaires" data-k="schedule"><button type="button" class="btn sm" data-rm="group" aria-label="Retirer">✕</button></div>`).join('');
-    $$('#settingsForm [data-rm]').forEach(b => b.addEventListener('click', () => { readSettingsForm(); const i = +b.closest('.item').dataset.i; (b.dataset.rm === 'plan' ? S.config.plans : S.config.groups).splice(i, 1); renderSettings(); }));
-    $$('#settingsForm input, #settingsForm select, #settingsForm button').forEach(el => { if (el.type !== 'submit') el.disabled = !S.canWrite; });
-    $('#settingsForm [type=submit]').disabled = !S.canWrite;
-  }
-  function readSettingsForm() {
-    S.config.clubName = $('#sName').value.trim(); S.config.inscriptionFee = +$('#sFee').value || 0; S.config.phone = $('#sPhone').value.trim();
-    S.config.plans = $$('#plansList .item').map((it, i) => ({ id: S.config.plans[i]?.id || uid('p'), name: $('[data-k=name]', it).value.trim(), months: Math.max(1, +$('[data-k=months]', it).value || 1), price: +$('[data-k=price]', it).value || 0 }));
-    S.config.groups = $$('#groupsList .item').map((it, i) => ({ id: S.config.groups[i]?.id || uid('g'), name: $('[data-k=name]', it).value.trim(), schedule: $('[data-k=schedule]', it).value.trim() }));
-  }
-  $('#addPlan').addEventListener('click', () => { readSettingsForm(); S.config.plans.push({ id: uid('p'), name: '', months: 1, price: 0 }); renderSettings(); });
-  $('#addGroup').addEventListener('click', () => { readSettingsForm(); S.config.groups.push({ id: uid('g'), name: '', schedule: '' }); renderSettings(); });
-  $('#settingsForm').addEventListener('submit', async ev => {
-    ev.preventDefault(); readSettingsForm();
-    S.config.plans = S.config.plans.filter(p => p.name); S.config.groups = S.config.groups.filter(g => g.name);
-    if (!S.db) return toast('Base indisponible');
-    try { await S.db.doc('settings/config').set(S.config); toast('Paramètres enregistrés'); } catch (e) { dbError(e, 'l\'enregistrement'); }
+}
+function profile(id) {
+  const m = D.members[id]; if (!m) return; const s = subState(m);
+  const pays = Object.values(D.payments).filter(p => p.memberId === id).sort((a, b) => a.date < b.date ? 1 : -1);
+  const pres = Object.values(D.attendance).filter(a => a.date >= addDays(today(), -30) && (a.present || []).includes(id)).length;
+  const tit = Object.values(D.titles).filter(x => x.memberId === id);
+  modal(`<div class="body"><div style="display:flex;gap:12px;align-items:center;margin-bottom:8px"><span class="av" style="width:52px;height:52px;font-size:16px">${esc(initials(m))}</span><div><h2 style="margin:0">${esc(fullName(m))}</h2><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"><span class="pill" style="background:${sportColor(m.sportId)}22;color:${sportColor(m.sportId)}">${esc(sportName(m.sportId))}</span><span class="pill ${s.k === 'active' ? 'g' : s.k === 'soon' ? 'a' : 'r'}">${t(s.k)}${s.d != null ? ` · ${s.d < 0 ? t('since') + ' ' + (-s.d) : t('in') + ' ' + s.d} ${t('day')}` : ''}</span>${beltHtml(m.belt)}</div></div></div>
+  <div class="actions"><button class="btn g" id="pPay">${t('pay')}</button><button class="btn" id="pEdit">${t('edit')}</button><button class="btn" id="pQr">${t('qr.card')}</button></div>
+  <dl class="dl"><dt>${t('category')}</dt><dd>${t(catOf(m))}${age(m.birthDate) != null ? ` · ${age(m.birthDate)} ${t('years')}` : ''}</dd><dt>${t('phone')}</dt><dd>${esc(m.phone || '—')}</dd><dt>${t('parent')}</dt><dd>${esc(m.parentContact || '—')}</dd><dt>${t('coach')}</dt><dd>${esc(coachName(m.coachId))}</dd><dt>${t('join')}</dt><dd>${fmtD(m.joinDate)}</dd><dt>${t('endDate')}</dt><dd>${fmtD(m.endDate)}</dd><dt>${t('nav.ins')}</dt><dd>${m.insuranceDate ? fmtD(m.insuranceDate) + ' → ' + fmtD(addMonths(m.insuranceDate, 12)) : '—'} <span class="pill ${insState(m) ? 'g' : 'r'}">${insState(m) ? t('insured') : t('notInsured')}</span></dd><dt>${t('medical')}</dt><dd>${fmtD(m.medicalDate)}</dd><dt>${t('licence')}</dt><dd>${esc(m.licence || '—')}</dd><dt>${t('cin')}</dt><dd>${esc(m.cin || '—')}</dd><dt>${t('address')}</dt><dd>${esc(m.address || '—')}</dd><dt>${t('attendance30')}</dt><dd>${pres} ${t('sessions')}</dd>${m.notes ? `<dt>${t('notes')}</dt><dd>${esc(m.notes)}</dd>` : ''}</dl>
+  ${tit.length ? `<div class="section"><h3>${t('titles')}</h3>${tit.map(x => `<div style="font-size:13px">🏆 ${esc(x.competition)} — ${t(x.rank)} (${fmtD(x.date)})</div>`).join('')}</div>` : ''}
+  <div class="section"><h3>${t('payments')} <small style="color:var(--muted);font-weight:500">${pays.length ? money(sum(pays, p => p.amount)) : ''}</small></h3>${pays.length ? `<div class="tw"><table><tbody>${pays.slice(0, 12).map(p => `<tr><td>${fmtD(p.date)}</td><td>${esc(p.planName)}</td><td>${esc(t(p.method) || p.method)}</td><td style="text-align:end"><b>${money(p.amount)}</b></td></tr>`).join('')}</tbody></table></div>` : `<div class="empty">${t('noData')}</div>`}</div>
+  <div class="ff"><div class="right"><button class="btn" data-close>OK</button></div></div></div>`, () => {
+    $('#pPay').addEventListener('click', () => { closeModal(); payForm(m); });
+    $('#pEdit').addEventListener('click', () => { closeModal(); memberForm(m); });
+    $('#pQr').addEventListener('click', () => { closeModal(); qrCard(m); });
   });
-
-  // ---------- Drawer ----------
-  function openDrawer(id) {
-    const m = S.members.find(x => x.id === id); if (!m) return;
-    const s = status(m); const ms = medStatus(m);
-    const pays = S.payments.filter(p => p.memberId === id).sort((a, b) => a.date < b.date ? 1 : -1);
-    const since = addDays(today(), -30);
-    const pres = Object.values(S.attendance).filter(a => a.date >= since && (a.present || []).includes(id)).length;
-    $('#drawerBody').innerHTML = `
-      <div class="eyebrow" style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em">${esc(groupName(m.groupId))}</div>
-      <h2 style="font-size:28px;margin:4px 0 8px">${esc(fullName(m))}</h2>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="pill ${s.k}">${esc(s.t)}</span>${beltHtml(m.belt)}</div>
-      <div class="actions" style="margin-top:14px">
-        <button class="btn primary" id="dPay" ${S.canWrite ? '' : 'disabled'}>Encaisser</button>
-        <button class="btn" id="dEdit" ${S.canWrite ? '' : 'disabled'}>Modifier</button>
-      </div>
-      <dl class="dl">
-        <dt>Téléphone</dt><dd>${esc(m.phone || '—')}</dd>
-        <dt>Parent / tuteur</dt><dd>${esc(m.parentContact || '—')}</dd>
-        <dt>Naissance</dt><dd>${fmtDate(m.birthDate)}${age(m.birthDate) != null ? ` (${age(m.birthDate)} ans)` : ''}</dd>
-        <dt>Inscrit le</dt><dd>${fmtDate(m.joinDate)}</dd>
-        <dt>Formule</dt><dd>${esc(planName(m.planId))}</dd>
-        <dt>Fin d'abonnement</dt><dd>${fmtDate(m.endDate)}</dd>
-        <dt>Certificat médical</dt><dd>${m.medicalDate ? fmtDate(m.medicalDate) + ' → ' + fmtDate(addMonths(m.medicalDate, 12)) : '—'} <span class="pill ${ms === 'ok' ? 'ok' : ms === 'soon' ? 'warn' : 'bad'}">${ms === 'ok' ? 'valide' : ms === 'soon' ? 'à renouveler' : ms === 'expired' ? 'expiré' : 'manquant'}</span></dd>
-        <dt>Licence FRMTKD</dt><dd>${esc(m.licence || '—')}</dd>
-        <dt>CIN</dt><dd>${esc(m.cin || '—')}</dd>
-        <dt>Quartier</dt><dd>${esc(m.quartier || '—')}</dd>
-        <dt>Présences 30 j</dt><dd>${pres} séance${pres > 1 ? 's' : ''}</dd>
-        ${m.notes ? `<dt>Notes</dt><dd>${esc(m.notes)}</dd>` : ''}
-      </dl>
-      <div class="section"><h3>Paiements <span class="count" style="font-family:var(--body);font-size:12px;color:var(--muted);font-weight:500">${pays.length ? fmtDH(pays.reduce((a, p) => a + (+p.amount || 0), 0)) + ' au total' : ''}</span></h3>
-        <div class="list">${pays.length ? pays.slice(0, 20).map(p => `<div class="row" style="cursor:default"><div><div class="name">${fmtDH(p.amount)} · ${esc(p.planName || planName(p.planId))}</div><div class="meta">${esc(p.method || '')}${p.note ? ' · ' + esc(p.note) : ''}</div></div><div class="meta">${fmtDate(p.date)}</div></div>`).join('') : '<div class="empty">Aucun paiement enregistré.</div>'}</div>
-      </div>`;
-    $('#dPay').addEventListener('click', () => { closeDrawer(); openPayment(m); });
-    $('#dEdit').addEventListener('click', () => { closeDrawer(); openMember(m); });
-    $('#drawer').classList.add('open');
-  }
-  function closeDrawer() { $('#drawer').classList.remove('open'); }
-  $$('[data-close-drawer]').forEach(b => b.addEventListener('click', closeDrawer));
-  document.addEventListener('keydown', ev => { if (ev.key === 'Escape') closeDrawer(); });
-
-  // ---------- Member form ----------
-  function openMember(m) {
-    const f = $('#memberForm'); f.reset(); fillGroupSelects();
-    $('#memberFormTitle').textContent = m ? 'Modifier la fiche' : 'Nouvel adhérent';
-    $('#mId').value = m ? m.id : '';
-    $('#mLast').value = m?.lastName || ''; $('#mFirst').value = m?.firstName || ''; $('#mBirth').value = m?.birthDate || ''; $('#mSex').value = m?.sex || '';
-    $('#mPhone').value = m?.phone || ''; $('#mParent').value = m?.parentContact || ''; $('#mGroup').value = m?.groupId || ''; $('#mBelt').value = m?.belt ?? 0;
-    $('#mJoin').value = m?.joinDate || today(); $('#mEnd').value = m?.endDate || ''; $('#mCin').value = m?.cin || ''; $('#mLicence').value = m?.licence || '';
-    $('#mMed').value = m?.medicalDate || ''; $('#mQuartier').value = m?.quartier || ''; $('#mNotes').value = m?.notes || '';
-    const ar = $('#mArchive'); ar.hidden = !m; ar.textContent = m?.archived ? 'Réactiver' : 'Archiver';
-    $('#dlgMember').showModal();
-  }
-  $('#memberForm').addEventListener('submit', async ev => {
-    ev.preventDefault();
-    if (!S.db) return toast('Base indisponible');
-    const id = $('#mId').value || uid('m');
-    const prev = S.members.find(x => x.id === id) || {};
-    const body = { ...prev, id, lastName: $('#mLast').value.trim(), firstName: $('#mFirst').value.trim(), birthDate: $('#mBirth').value, sex: $('#mSex').value, phone: $('#mPhone').value.trim(), parentContact: $('#mParent').value.trim(), groupId: $('#mGroup').value, belt: +$('#mBelt').value, joinDate: $('#mJoin').value, endDate: $('#mEnd').value, cin: $('#mCin').value.trim(), licence: $('#mLicence').value.trim(), medicalDate: $('#mMed').value, quartier: $('#mQuartier').value.trim(), notes: $('#mNotes').value.trim(), archived: !!prev.archived, updatedAt: new Date().toISOString(), createdAt: prev.createdAt || new Date().toISOString() };
-    try { await S.db.doc('members/' + id).set(body); $('#dlgMember').close(); toast(prev.id ? 'Fiche mise à jour' : 'Adhérent ajouté'); } catch (e) { dbError(e, 'l\'enregistrement'); }
+}
+function payForm(m) {
+  const plans = () => D.settings.plans.filter(p => !p.sportId || !m || p.sportId === m.sportId);
+  modal(`<form id="pf"><h2>${t('pay')}</h2><div class="fields">
+    <div class="f full"><label for="pM">${t('player')} *</label><input id="pM" list="pML" value="${esc(m ? fullName(m) : '')}" autocomplete="off" required><datalist id="pML">${activeM().map(x => `<option value="${esc(fullName(x))}"></option>`).join('')}</datalist><div class="hint" id="pHint"></div></div>
+    <div class="f"><label for="pPlan">${t('plan')} *</label><select id="pPlan"></select></div><div class="f"><label for="pAmt">${t('amount')} *</label><input id="pAmt" type="number" min="0" step="1" required></div>
+    <div class="f"><label for="pDate">${t('date')}</label><input id="pDate" type="date" value="${today()}"></div><div class="f"><label for="pMeth">${t('method')}</label><select id="pMeth">${['cash', 'transfer', 'cheque', 'mobile'].map(k => `<option value="${k}">${t(k)}</option>`).join('')}</select></div>
+    <div class="f full"><label for="pNote">${t('note')}</label><input id="pNote"></div></div><div class="info" id="pPrev" hidden></div>
+    <div class="ff"><div class="right"><button type="button" class="btn" data-close>${t('cancel')}</button><button class="btn g">${t('pay')}</button></div></div></form>`, () => {
+    const sel = () => { const n = $('#pM').value.trim().toLowerCase(); return activeM().find(x => fullName(x).toLowerCase() === n); };
+    const fillPlans = () => { const mm = sel(); const ps = D.settings.plans.filter(p => !p.sportId || !mm || p.sportId === mm.sportId); $('#pPlan').innerHTML = ps.map(p => `<option value="${p.id}">${esc(p.name)} — ${money(p.price)} (${p.months} ${t('months')})</option>`).join(''); };
+    const sync = keep => { const mm = sel(); const p = D.settings.plans.find(x => x.id === $('#pPlan').value); $('#pHint').textContent = mm ? `${sportName(mm.sportId)} · ${t('endDate')}: ${fmtD(mm.endDate)}` : ($('#pM').value ? t('chooseFromList') : ''); if (p && !keep) $('#pAmt').value = p.price; const pv = $('#pPrev'); if (mm && p) { const start = mm.endDate && mm.endDate >= today() ? mm.endDate : ($('#pDate').value || today()); const end = addMonths(start, p.months); pv.hidden = false; pv.textContent = `${t('newEnd')}: ${fmtD(end)}`; pv.dataset.end = end; } else pv.hidden = true; };
+    fillPlans(); sync();
+    $('#pM').addEventListener('input', () => { fillPlans(); sync(); }); $('#pPlan').addEventListener('change', () => sync()); $('#pDate').addEventListener('change', () => sync(true));
+    $('#pf').addEventListener('submit', ev => { ev.preventDefault(); const mm = sel(); const p = D.settings.plans.find(x => x.id === $('#pPlan').value); if (!mm) return toast(t('chooseFromList')); if (!p) return; const id = uid('pay'); const end = $('#pPrev').dataset.end; D.payments[id] = { id, memberId: mm.id, memberName: fullName(mm), planId: p.id, planName: p.name, months: p.months, amount: +$('#pAmt').value || 0, date: $('#pDate').value || today(), method: $('#pMeth').value, note: $('#pNote').value.trim() }; D.members[mm.id].endDate = end; D.members[mm.id].planId = p.id; closeModal(); save(); toast(`${money($('#pAmt').value)} · ${fmtD(end)}`); });
   });
-  $('#mArchive').addEventListener('click', async () => {
-    const id = $('#mId').value; const m = S.members.find(x => x.id === id); if (!m || !S.db) return;
-    const arch = !m.archived;
-    if (arch && !await confirmBox('Archiver cet adhérent ?', 'La fiche reste consultable dans le filtre « Archivés » et peut être réactivée.', 'Archiver')) return;
-    try { await S.db.doc('members/' + id).update({ archived: arch, updatedAt: new Date().toISOString() }); $('#dlgMember').close(); toast(arch ? 'Adhérent archivé' : 'Adhérent réactivé'); } catch (e) { dbError(e, 'l\'archivage'); }
-  });
+}
 
-  // ---------- Payment form ----------
-  function activeMembersForList() { return S.members.filter(m => !m.archived).sort((a, b) => fullName(a).localeCompare(fullName(b), 'fr')); }
-  function openPayment(m) {
-    const f = $('#payForm'); f.reset(); fillGroupSelects();
-    $('#memberList').innerHTML = activeMembersForList().map(x => `<option value="${esc(fullName(x))}"></option>`).join('');
-    $('#pMember').value = m ? fullName(m) : ''; $('#pDate').value = today();
-    if (m?.planId && S.config.plans.some(p => p.id === m.planId)) $('#pPlan').value = m.planId;
-    syncPayForm();
-    $('#dlgPay').showModal();
-    setTimeout(() => (m ? $('#pPlan') : $('#pMember')).focus(), 50);
+P.coaches = () => { const rows = Object.values(D.coaches).sort((a, b) => fullName(a).localeCompare(fullName(b), 'fr')); return `<div class="ph"><div><h2>${t('nav.coaches')}</h2><p>${rows.length}</p></div><button class="btn p" id="newC">+ ${t('c.new')}</button></div><div class="tw"><table><thead><tr><th>${t('photo')}</th><th>${t('name')}</th><th>${t('speciality')}</th><th>${t('phone')}</th><th>${t('email')}</th><th>${t('salary')}</th><th>${t('players')}</th><th></th></tr></thead><tbody>${rows.map(c => `<tr><td><span class="av" style="background:linear-gradient(135deg,#4f46e5,#0ea5e9)">${esc(initials(c))}</span></td><td><b>${esc(fullName(c))}</b></td><td>${esc(c.speciality || sportName(c.sportId))}</td><td>${esc(c.phone || '—')}</td><td>${esc(c.email || '—')}</td><td>${money(c.salary)}</td><td>${activeM().filter(m => m.coachId === c.id).length}</td><td><button class="btn sm" data-e="${c.id}">${t('edit')}</button></td></tr>`).join('')}</tbody></table>${rows.length ? '' : `<div class="empty">${t('noData')}</div>`}</div>`; };
+P.coaches_wire = () => { $('#newC').addEventListener('click', () => coachForm(null)); $$('[data-e]').forEach(b => b.addEventListener('click', () => coachForm(D.coaches[b.dataset.e]))); };
+function coachForm(c) { modal(`<form id="cf"><h2>${c ? t('edit') : t('c.new')}</h2><div class="fields"><div class="f"><label>${t('lastName')} *</label><input id="cLast" value="${esc(c?.lastName)}" required></div><div class="f"><label>${t('firstName')} *</label><input id="cFirst" value="${esc(c?.firstName)}" required></div><div class="f"><label>${t('sport')}</label>${sportSelect('cSport', c?.sportId)}</div><div class="f"><label>${t('speciality')}</label><input id="cSpec" value="${esc(c?.speciality)}"></div><div class="f"><label>${t('phone')}</label><input id="cPhone" value="${esc(c?.phone)}"></div><div class="f"><label>${t('email')}</label><input id="cMail" type="email" value="${esc(c?.email)}"></div><div class="f"><label>${t('salary')}</label><input id="cSal" type="number" min="0" value="${c?.salary ?? ''}"></div></div><div class="ff">${c ? `<button type="button" class="btn" id="cDel" style="color:var(--red)">${t('delete')}</button>` : '<span></span>'}<div class="right"><button type="button" class="btn" data-close>${t('cancel')}</button><button class="btn p">${t('save')}</button></div></div></form>`, () => {
+  $('#cf').addEventListener('submit', ev => { ev.preventDefault(); const id = c?.id || uid('c'); D.coaches[id] = { id, lastName: $('#cLast').value.trim(), firstName: $('#cFirst').value.trim(), sportId: $('#cSport').value, speciality: $('#cSpec').value.trim(), phone: $('#cPhone').value.trim(), email: $('#cMail').value.trim(), salary: +$('#cSal').value || 0 }; closeModal(); save(); toast(t('saved')); });
+  if (c) $('#cDel').addEventListener('click', async () => { if (!await confirmBox(t('delete') + ' ?', fullName(c), t('delete'))) return; delete D.coaches[c.id]; closeModal(); save(); });
+}); }
+
+P.subs = () => {
+  const a = activeM(); const more = a.filter(m => subState(m).k === 'active'), less = a.filter(m => subState(m).k === 'soon'), exp = a.filter(m => subState(m).k === 'expired');
+  let rows = filters.subFilter === 'more' ? more : filters.subFilter === 'less' ? less : filters.subFilter === 'exp' ? exp : a;
+  if (filters.sport) rows = rows.filter(m => m.sportId === filters.sport);
+  if (filters.q) rows = rows.filter(m => fullName(m).toLowerCase().includes(filters.q.toLowerCase()));
+  rows.sort((a, b) => fullName(a).localeCompare(fullName(b), 'fr'));
+  const st = (k, n, l, c, ic) => `<button class="stat ${filters.subFilter === k ? 'on' : ''}" data-f="${k}"><span class="ic" style="background:${c}">${svg(ic)}</span><span><b>${n}</b><small>${l}</small></span></button>`;
+  return `<div class="ph"><div><h2>${t('nav.subs')}</h2><p>${t('sub.title')}</p></div><button class="btn g" id="newPay">+ ${t('pay')}</button></div>
+  <div class="stats">${st('more', more.length, t('sub.more2'), '#22c55e', 'att')}${st('less', less.length, t('sub.less2'), '#f59e0b', 'subs')}${st('exp', exp.length, t('sub.exp'), '#ef4444', 'exams')}${st('all', a.length, t('all'), '#6d5dfc', 'players')}</div>
+  <div class="toolbar"><input class="grow" type="search" id="q" value="${esc(filters.q)}" placeholder="${t('search')}…">${sportSelect('fSport', filters.sport, t('allSports'))}</div>
+  <div class="tw"><table><thead><tr><th>${t('photo')}</th><th>${t('player')}</th><th>${t('belt')}</th><th>${t('status')}</th><th>${t('payDate')}</th><th>${t('endDate')}</th><th>${t('countdown')}</th></tr></thead><tbody>${rows.map(m => { const s = subState(m), lp = lastPay(m), pm = paidThisMonth(m); return `<tr class="click" data-id="${m.id}"><td><span class="av">${esc(initials(m))}</span></td><td><b>${esc(fullName(m))}</b><br><small style="color:var(--muted)">${esc(sportName(m.sportId))}</small></td><td>${beltHtml(m.belt)}</td><td><span class="pill ${pm ? 'g' : 'r'}">${pm ? t('paid') : t('unpaid')}</span></td><td>${lp ? fmtD(lp.date) : '—'}</td><td>${fmtD(m.endDate)}</td><td><span class="badge ${s.k === 'active' ? 'g' : s.k === 'soon' ? 'a' : 'r'}">${s.d == null ? '—' : s.d}</span></td></tr>`; }).join('')}</tbody></table>${rows.length ? '' : `<div class="empty">${t('noData')}</div>`}</div>`;
+};
+P.subs_wire = () => { $$('[data-f]').forEach(b => b.addEventListener('click', () => { filters.subFilter = b.dataset.f; render(); })); $('#q').addEventListener('input', e => { filters.q = e.target.value; render(); $('#q').focus(); const v = $('#q').value; $('#q').setSelectionRange(v.length, v.length); }); $('#fSport').addEventListener('change', e => { filters.sport = e.target.value; render(); }); $('#newPay').addEventListener('click', () => payForm(null)); $$('tr[data-id]').forEach(r => r.addEventListener('click', () => payForm(D.members[r.dataset.id]))); };
+
+P.ins = () => { const a = activeM().sort((x, y) => (insState(x) === insState(y) ? fullName(x).localeCompare(fullName(y), 'fr') : insState(x) ? 1 : -1)); const ok = a.filter(insState).length; return `<div class="ph"><div><h2>${t('nav.ins')}</h2><p>${t('ins.sub')}</p></div></div><div class="stats"><div class="stat"><span class="ic" style="background:#22c55e">${svg('ins')}</span><span><b>${ok}</b><small>${t('insured')}</small></span></div><div class="stat"><span class="ic" style="background:#ef4444">${svg('ins')}</span><span><b>${a.length - ok}</b><small>${t('notInsured')}</small></span></div></div><div class="tw"><table><thead><tr><th>${t('player')}</th><th>${t('sport')}</th><th>${t('licence')}</th><th>${t('insDate')}</th><th>${t('validUntil')}</th><th>${t('status')}</th><th></th></tr></thead><tbody>${a.map(m => `<tr><td><b>${esc(fullName(m))}</b></td><td>${esc(sportName(m.sportId))}</td><td>${esc(m.licence || '—')}</td><td>${fmtD(m.insuranceDate)}</td><td>${m.insuranceDate ? fmtD(addMonths(m.insuranceDate, 12)) : '—'}</td><td><span class="pill ${insState(m) ? 'g' : 'r'}">${insState(m) ? '✓ ' + t('insured') : '✗ ' + t('notInsured')}</span></td><td>${insState(m) ? '' : `<button class="btn sm g" data-ins="${m.id}">${t('ins.mark')}</button>`}</td></tr>`).join('')}</tbody></table></div>`; };
+P.ins_wire = () => $$('[data-ins]').forEach(b => b.addEventListener('click', () => { const m = D.members[b.dataset.ins]; modal(`<form id="if"><h2>${t('ins.mark')} — ${esc(fullName(m))}</h2><div class="fields"><div class="f"><label>${t('insDate')}</label><input id="iD" type="date" value="${today()}" required></div><div class="f"><label>${t('licence')}</label><input id="iL" value="${esc(m.licence)}"></div></div><div class="ff"><div class="right"><button type="button" class="btn" data-close>${t('cancel')}</button><button class="btn p">${t('save')}</button></div></div></form>`, () => $('#if').addEventListener('submit', ev => { ev.preventDefault(); m.insuranceDate = $('#iD').value; m.licence = $('#iL').value.trim(); closeModal(); save(); toast(t('saved')); })); }));
+
+P.belt = () => { const a = activeM().filter(m => (sportOf(m.sportId) || {}).belts !== false); const rows = BELTS.map((b, i) => ({ b, i, ms: a.filter(m => m.belt === i) })); const noBelt = a.filter(m => m.belt == null); return `<div class="ph"><div><h2>${t('nav.belt')}</h2><p>${t('belt.sub')}</p></div></div><div class="grid">${[...rows, { b: null, i: null, ms: noBelt }].map(r => `<div class="card"><h3 style="display:flex;align-items:center;gap:8px">${r.b ? beltSw(r.i, 'sw') : ''}${r.b ? esc(r.b[LANG] || r.b.fr) : t('none')} <span style="margin-inline-start:auto;color:var(--muted);font-weight:500">${r.ms.length}</span></h3>${r.ms.length ? `<div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">${r.ms.map(m => `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span>${esc(fullName(m))}</span><button class="btn sm" data-pr="${m.id}">${t('promote')}</button></div>`).join('')}</div>` : `<div class="empty" style="padding:8px">—</div>`}</div>`).join('')}</div>`; };
+P.belt_wire = () => $$('[data-pr]').forEach(b => b.addEventListener('click', () => promoteForm(D.members[b.dataset.pr])));
+function promoteForm(m) { modal(`<form id="bf"><h2>${t('belt.promote')} — ${esc(fullName(m))}</h2><div class="f"><label>${t('belt')}</label><select id="bSel">${BELTS.map((b, i) => `<option value="${i}" ${m.belt === i ? 'selected' : ''}>${esc(b[LANG] || b.fr)}</option>`).join('')}</select></div><div class="f" style="margin-top:10px"><label>${t('date')}</label><input id="bD" type="date" value="${today()}"></div><div class="ff"><div class="right"><button type="button" class="btn" data-close>${t('cancel')}</button><button class="btn p">${t('save')}</button></div></div></form>`, () => $('#bf').addEventListener('submit', ev => { ev.preventDefault(); m.belt = +$('#bSel').value; m.beltDate = $('#bD').value; closeModal(); save(); toast(t('saved')); })); }
+
+P.exams = () => { const ex = Object.values(D.exams).sort((a, b) => a.date < b.date ? 1 : -1); return `<div class="ph"><div><h2>${t('nav.exams')}</h2><p>${t('exam.sub')}</p></div><button class="btn p" id="newEx">+ ${t('exam.new')}</button></div>${ex.length ? ex.map(e => `<div class="card" style="margin-bottom:12px"><div class="ph" style="margin-bottom:8px"><div><h3>${fmtD(e.date)} · ${esc(e.title || '')}</h3><p>${t('examiner')}: ${esc(e.examiner || '—')} · ${e.candidates.length} ${t('candidates')}</p></div><button class="btn sm" data-del="${e.id}" style="color:var(--red)">${t('delete')}</button></div><div class="tw"><table><thead><tr><th>${t('player')}</th><th>${t('belt')}</th><th>${t('targetBelt')}</th><th>${t('result')}</th></tr></thead><tbody>${e.candidates.map(c => { const m = D.members[c.memberId]; if (!m) return ''; return `<tr><td><b>${esc(fullName(m))}</b></td><td>${beltHtml(c.from)}</td><td>${beltHtml(c.to)}</td><td><div class="actions"><button class="btn sm ${c.result === 'pass' ? 'g' : ''}" data-r="pass" data-e="${e.id}" data-m="${c.memberId}">${t('pass')}</button><button class="btn sm ${c.result === 'fail' ? 'r' : ''}" data-r="fail" data-e="${e.id}" data-m="${c.memberId}">${t('fail')}</button></div></td></tr>`; }).join('')}</tbody></table></div></div>`).join('') : `<div class="card empty">${t('noData')}</div>`}`; };
+P.exams_wire = () => {
+  $('#newEx').addEventListener('click', () => { const cands = activeM().filter(m => (sportOf(m.sportId) || {}).belts !== false).sort((a, b) => fullName(a).localeCompare(fullName(b), 'fr')); modal(`<form id="ef"><h2>${t('exam.new')}</h2><div class="fields"><div class="f"><label>${t('date')}</label><input id="eD" type="date" value="${today()}" required></div><div class="f"><label>${t('examiner')}</label><input id="eX"></div><div class="f full"><label>${t('name')}</label><input id="eT" placeholder="Passage de grade"></div><div class="f full"><label>${t('candidates')}</label><div style="max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px;display:grid;gap:6px">${cands.map(m => `<label class="chk"><input type="checkbox" value="${m.id}"><span>${esc(fullName(m))} <small style="color:var(--muted)">(${esc(beltName(m.belt))})</small></span></label>`).join('')}</div></div></div><div class="ff"><div class="right"><button type="button" class="btn" data-close>${t('cancel')}</button><button class="btn p">${t('save')}</button></div></div></form>`, () => $('#ef').addEventListener('submit', ev => { ev.preventDefault(); const ids = $$('#ef input[type=checkbox]:checked').map(c => c.value); const id = uid('ex'); D.exams[id] = { id, date: $('#eD').value, examiner: $('#eX').value.trim(), title: $('#eT').value.trim(), candidates: ids.map(mid => { const m = D.members[mid]; const from = m.belt == null ? -1 : m.belt; return { memberId: mid, from: m.belt, to: Math.min(from + 1, BELTS.length - 1), result: 'pending' }; }) }; closeModal(); save(); })); });
+  $$('[data-r]').forEach(b => b.addEventListener('click', () => { const e = D.exams[b.dataset.e]; const c = e.candidates.find(x => x.memberId === b.dataset.m); c.result = b.dataset.r; if (c.result === 'pass') { D.members[c.memberId].belt = c.to; D.members[c.memberId].beltDate = e.date; } save(); }));
+  $$('[data-del]').forEach(b => b.addEventListener('click', async () => { if (!await confirmBox(t('delete') + ' ?', '', t('delete'))) return; delete D.exams[b.dataset.del]; save(); }));
+};
+
+P.att = () => { if (!filters.attSport) filters.attSport = D.settings.sports[0]?.id || ''; const key = `${filters.attDate}_${filters.attSport}`; const doc = D.attendance[key] || { present: [] }; const set = new Set(doc.present); const list = activeM().filter(m => m.sportId === filters.attSport).sort((a, b) => fullName(a).localeCompare(fullName(b), 'fr')); return `<div class="ph"><div><h2>${t('nav.att')}</h2><p>${t('att.sub')}</p></div></div><div class="toolbar"><input type="date" id="aD" value="${filters.attDate}" style="flex:0 1 170px">${sportSelect('aS', filters.attSport)}<span style="color:var(--muted)">${set.size} / ${list.length} ${t('present')}</span></div><div class="attn">${list.map(m => { const s = subState(m); return `<label class="${set.has(m.id) ? 'on' : ''}"><input type="checkbox" class="chkbox" data-id="${m.id}" ${set.has(m.id) ? 'checked' : ''} style="width:18px;height:18px;accent-color:var(--green)"><span><div><b>${esc(fullName(m))}</b></div><div class="m">${s.k === 'expired' ? '⚠ ' + t('expired') : esc(beltName(m.belt))}</div></span></label>`; }).join('')}</div>${list.length ? '' : `<div class="card empty">${t('noData')}</div>`}`; };
+P.att_wire = () => { $('#aD').addEventListener('change', e => { filters.attDate = e.target.value; render(); }); $('#aS').addEventListener('change', e => { filters.attSport = e.target.value; render(); }); $$('.chkbox').forEach(c => c.addEventListener('change', () => { const key = `${filters.attDate}_${filters.attSport}`; const doc = D.attendance[key] || { date: filters.attDate, sportId: filters.attSport, present: [] }; const s = new Set(doc.present); c.checked ? s.add(c.dataset.id) : s.delete(c.dataset.id); D.attendance[key] = { ...doc, present: [...s] }; save(); })); };
+
+P.titles = () => { const rows = Object.values(D.titles).sort((a, b) => a.date < b.date ? 1 : -1); const medal = r => r === 'gold' ? '🥇' : r === 'silver' ? '🥈' : r === 'bronze' ? '🥉' : '🎖'; return `<div class="ph"><div><h2>${t('nav.titles')}</h2><p>${t('t.sub')}</p></div><button class="btn p" id="newT">+ ${t('t.new')}</button></div><div class="tw"><table><thead><tr><th>${t('date')}</th><th>${t('player')}</th><th>${t('competition')}</th><th>${t('rank')}</th><th></th></tr></thead><tbody>${rows.map(x => `<tr><td>${fmtD(x.date)}</td><td><b>${esc(D.members[x.memberId] ? fullName(D.members[x.memberId]) : '—')}</b></td><td>${esc(x.competition)}</td><td>${medal(x.rank)} ${t(x.rank)}</td><td><button class="btn sm" data-del="${x.id}" style="color:var(--red)">${t('delete')}</button></td></tr>`).join('')}</tbody></table>${rows.length ? '' : `<div class="empty">${t('noData')}</div>`}</div>`; };
+P.titles_wire = () => { $('#newT').addEventListener('click', () => modal(`<form id="tf"><h2>${t('t.new')}</h2><div class="fields"><div class="f full"><label>${t('player')}</label><select id="tM">${activeM().sort((a, b) => fullName(a).localeCompare(fullName(b), 'fr')).map(m => `<option value="${m.id}">${esc(fullName(m))}</option>`).join('')}</select></div><div class="f full"><label>${t('competition')}</label><input id="tC" required placeholder="Championnat régional Souss-Massa"></div><div class="f"><label>${t('rank')}</label><select id="tR">${['gold', 'silver', 'bronze', 'participation'].map(k => `<option value="${k}">${t(k)}</option>`).join('')}</select></div><div class="f"><label>${t('date')}</label><input id="tD" type="date" value="${today()}"></div></div><div class="ff"><div class="right"><button type="button" class="btn" data-close>${t('cancel')}</button><button class="btn p">${t('save')}</button></div></div></form>`, () => $('#tf').addEventListener('submit', ev => { ev.preventDefault(); const id = uid('t'); D.titles[id] = { id, memberId: $('#tM').value, competition: $('#tC').value.trim(), rank: $('#tR').value, date: $('#tD').value }; closeModal(); save(); }))); $$('[data-del]').forEach(b => b.addEventListener('click', () => { delete D.titles[b.dataset.del]; save(); })); };
+
+P.fin = () => { const mo = filters.finMonth; const pays = Object.values(D.payments).filter(p => (p.date || '').startsWith(mo)); const exps = Object.values(D.expenses).filter(e => (e.date || '').startsWith(mo)); const rev = sum(pays, p => p.amount), ex = sum(exps, e => e.amount); const months = []; const d = new Date(); d.setDate(1); for (let i = 5; i >= 0; i--) { const x = new Date(d.getFullYear(), d.getMonth() - i, 1); const key = `${x.getFullYear()}-${pad(x.getMonth() + 1)}`; months.push({ key, l: x.toLocaleDateString(LANG === 'ar' ? 'ar-MA' : LANG === 'en' ? 'en-GB' : 'fr-FR', { month: 'short' }), r: sum(Object.values(D.payments).filter(p => (p.date || '').startsWith(key)), p => p.amount), e: sum(Object.values(D.expenses).filter(p => (p.date || '').startsWith(key)), p => p.amount) }); } const max = Math.max(1, ...months.map(m => Math.max(m.r, m.e)));
+  const lines = [...pays.map(p => ({ d: p.date, l: `${p.memberName} · ${p.planName}`, c: t(p.method) || p.method, a: p.amount, k: 'r' })), ...exps.map(e => ({ d: e.date, l: e.label, c: t(e.category) || e.category, a: -e.amount, k: 'e', id: e.id }))].sort((a, b) => a.d < b.d ? 1 : -1);
+  return `<div class="ph"><div><h2>${t('nav.fin')}</h2><p>${t('fin.sub')}</p></div><div class="actions"><input type="month" id="fM" value="${mo}" style="width:auto"><button class="btn r" id="newE">+ ${t('exp.new')}</button></div></div>
+  <div class="stats"><div class="stat"><span class="ic" style="background:#22c55e">${svg('fin')}</span><span><b>${money(rev)}</b><small>${t('revenue')}</small></span></div><div class="stat"><span class="ic" style="background:#ef4444">${svg('fin')}</span><span><b>${money(ex)}</b><small>${t('expenses')}</small></span></div><div class="stat"><span class="ic" style="background:${rev - ex >= 0 ? '#4f46e5' : '#f59e0b'}">${svg('fin')}</span><span><b>${money(rev - ex)}</b><small>${t('balance')}</small></span></div></div>
+  <div class="grid" style="margin-bottom:14px"><div class="card"><h3>${t('last6')}</h3><div class="legend" style="margin-top:6px"><span><i style="background:#22c55e"></i>${t('revenue')}</span><span><i style="background:#ef4444"></i>${t('expenses')}</span></div><div class="bars">${months.map(m => `<div class="b"><div class="v">${Math.round(m.r - m.e).toLocaleString('fr-MA')}</div><div class="st"><i style="background:#22c55e;height:${Math.round(m.r / max * 100)}%"></i><i style="background:#ef4444;height:${Math.round(m.e / max * 100)}%"></i></div><div class="l">${esc(m.l)}</div></div>`).join('')}</div></div></div>
+  <div class="tw"><table><thead><tr><th>${t('date')}</th><th>${t('label')}</th><th>${t('categoryExp')}</th><th style="text-align:end">${t('amount')}</th><th></th></tr></thead><tbody>${lines.map(x => `<tr><td>${fmtD(x.d)}</td><td>${esc(x.l)}</td><td>${esc(x.c)}</td><td style="text-align:end;color:${x.a < 0 ? 'var(--red)' : 'var(--green)'}"><b>${x.a < 0 ? '−' : '+'}${money(Math.abs(x.a))}</b></td><td>${x.id ? `<button class="btn sm" data-del="${x.id}" style="color:var(--red)">${t('delete')}</button>` : ''}</td></tr>`).join('')}</tbody></table>${lines.length ? '' : `<div class="empty">${t('noData')}</div>`}</div>`; };
+P.fin_wire = () => { $('#fM').addEventListener('change', e => { filters.finMonth = e.target.value; render(); }); $('#newE').addEventListener('click', () => modal(`<form id="xf"><h2>${t('exp.new')}</h2><div class="fields"><div class="f full"><label>${t('label')}</label><input id="xL" required></div><div class="f"><label>${t('categoryExp')}</label><select id="xC">${['rent', 'salaries', 'equipment', 'utilities', 'other'].map(k => `<option value="${k}">${t(k)}</option>`).join('')}</select></div><div class="f"><label>${t('amount')}</label><input id="xA" type="number" min="0" required></div><div class="f"><label>${t('date')}</label><input id="xD" type="date" value="${today()}"></div></div><div class="ff"><div class="right"><button type="button" class="btn" data-close>${t('cancel')}</button><button class="btn p">${t('save')}</button></div></div></form>`, () => $('#xf').addEventListener('submit', ev => { ev.preventDefault(); const id = uid('x'); D.expenses[id] = { id, label: $('#xL').value.trim(), category: $('#xC').value, amount: +$('#xA').value || 0, date: $('#xD').value }; closeModal(); save(); }))); $$('[data-del]').forEach(b => b.addEventListener('click', () => { delete D.expenses[b.dataset.del]; save(); })); };
+
+P.prices = () => `<div class="ph"><div><h2>${t('nav.prices')}</h2><p>${t('prices.sub')}</p></div></div><form class="card" id="prf"><div class="f" style="max-width:260px;margin-bottom:14px"><label>${t('inscriptionFee')}</label><input id="prFee" type="number" min="0" value="${D.settings.inscriptionFee}"></div><div class="editlist" id="plans">${D.settings.plans.map((p, i) => `<div class="it" data-i="${i}"><input data-k="name" value="${esc(p.name)}" placeholder="${t('name')}">${sportSelect('ps' + i, p.sportId, t('allSports')).replace('<select', '<select data-k="sportId"')}<input data-k="months" type="number" min="1" value="${p.months}" placeholder="${t('months')}"><input data-k="price" type="number" min="0" value="${p.price}" placeholder="${t('price')}"><button type="button" class="btn sm" data-rm="${i}">✕</button></div>`).join('')}</div><div class="actions" style="margin-top:10px"><button type="button" class="btn sm" id="addPlan">${t('prices.add')}</button></div><div class="ff"><div class="right"><button class="btn p">${t('save')}</button></div></div></form>`;
+function readPlans() { D.settings.inscriptionFee = +$('#prFee').value || 0; D.settings.plans = $$('#plans .it').map((it, i) => ({ id: D.settings.plans[i]?.id || uid('p'), name: $('[data-k=name]', it).value.trim(), sportId: $('[data-k=sportId]', it).value, months: Math.max(1, +$('[data-k=months]', it).value || 1), price: +$('[data-k=price]', it).value || 0 })); }
+P.prices_wire = () => { $('#addPlan').addEventListener('click', () => { readPlans(); D.settings.plans.push({ id: uid('p'), name: '', sportId: '', months: 1, price: 0 }); render(); }); $$('[data-rm]').forEach(b => b.addEventListener('click', () => { readPlans(); D.settings.plans.splice(+b.dataset.rm, 1); render(); })); $('#prf').addEventListener('submit', ev => { ev.preventDefault(); readPlans(); D.settings.plans = D.settings.plans.filter(p => p.name); save(); toast(t('saved')); }); };
+
+P.settings = () => `<div class="ph"><div><h2>${t('nav.settings')}</h2></div></div><form class="card" id="sf"><div class="fields"><div class="f"><label>${t('clubName')}</label><input id="sName" value="${esc(D.settings.clubName)}"></div><div class="f"><label>${t('password')}</label><input id="sPass" type="text" value="${esc(D.settings.password)}"></div></div><div class="section"><h3>${t('sports')}</h3><div class="editlist" id="sports">${D.settings.sports.map((s, i) => `<div class="it s2" data-i="${i}"><input data-k="name" value="${esc(s.name)}" placeholder="${t('name')}"><input data-k="color" type="color" value="${s.color}" style="padding:2px;height:36px"><label class="chk" style="white-space:nowrap"><input data-k="belts" type="checkbox" ${s.belts !== false ? 'checked' : ''}>${t('belt')}</label><button type="button" class="btn sm" data-rm="${i}">✕</button></div>`).join('')}</div><button type="button" class="btn sm" id="addSport" style="margin-top:8px">${t('sports.add')}</button></div><div class="ff"><div class="right"><button class="btn p">${t('save')}</button></div></div></form>
+<div class="card" style="margin-top:14px"><h3>${t('data')}</h3><p style="color:var(--muted);font-size:13px">${t('data.sub')}</p><div class="actions"><button class="btn" id="demo">${t('loadDemo')}</button><button class="btn" id="wipe" style="color:var(--red)">${t('wipe')}</button></div></div>`;
+function readSports() { D.settings.clubName = $('#sName').value.trim() || 'Club'; D.settings.password = $('#sPass').value; D.settings.sports = $$('#sports .it').map((it, i) => ({ id: D.settings.sports[i]?.id || uid('s'), name: $('[data-k=name]', it).value.trim(), color: $('[data-k=color]', it).value, belts: $('[data-k=belts]', it).checked })); }
+P.settings_wire = () => { $('#addSport').addEventListener('click', () => { readSports(); D.settings.sports.push({ id: uid('s'), name: '', color: '#64748b', belts: false }); render(); }); $$('#sports [data-rm]').forEach(b => b.addEventListener('click', () => { readSports(); D.settings.sports.splice(+b.dataset.rm, 1); render(); })); $('#sf').addEventListener('submit', ev => { ev.preventDefault(); readSports(); D.settings.sports = D.settings.sports.filter(s => s.name); save(); toast(t('saved')); }); $('#demo').addEventListener('click', async () => { if (!await confirmBox(t('loadDemo') + ' ?', '', t('confirm'))) return; D = demo(); save(); }); $('#wipe').addEventListener('click', async () => { if (!await confirmBox(t('wipe') + ' ?', '', t('wipe'))) return; const s = D.settings; D = EMPTY(); D.settings = s; save(); }); };
+
+// QR
+let qrStream = null, qrTimer = null;
+P.qr = () => `<div class="ph"><div><h2>${t('nav.qr')}</h2><p>${t('qr.sub')}</p></div></div><div class="qrwrap"><div class="card"><video id="vid" playsinline muted autoplay hidden></video><div id="qrMsg" class="warn" hidden></div><div class="actions" style="margin-top:10px"><button class="btn p" id="qrStart">${t('qr.start')}</button><button class="btn" id="qrStop" hidden>${t('qr.stop')}</button></div></div><div class="card"><h3>${t('qr.manual')}</h3><form id="qrForm" class="toolbar" style="margin-top:8px"><input class="grow" id="qrCode" placeholder="m…"><button class="btn p">OK</button></form><p style="color:var(--muted);font-size:12.5px">${t('qr.card')}: ${t('profile')} → "${t('qr.card')}"</p></div></div>`;
+P.qr_wire = () => {
+  const stop = () => { if (qrTimer) clearInterval(qrTimer); qrTimer = null; if (qrStream) qrStream.getTracks().forEach(tr => tr.stop()); qrStream = null; const v = $('#vid'); if (v) { v.hidden = true; } $('#qrStart').hidden = false; $('#qrStop').hidden = true; };
+  $('#qrStart').addEventListener('click', async () => { if (!('BarcodeDetector' in window) || !navigator.mediaDevices) { $('#qrMsg').hidden = false; $('#qrMsg').textContent = t('qr.unsupported'); return; } try { qrStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }); const v = $('#vid'); v.srcObject = qrStream; v.hidden = false; $('#qrStart').hidden = true; $('#qrStop').hidden = false; const det = new BarcodeDetector({ formats: ['qr_code'] }); qrTimer = setInterval(async () => { try { const codes = await det.detect(v); if (codes.length) { const raw = codes[0].rawValue; stop(); openCode(raw); } } catch (e) {} }, 400); } catch (e) { $('#qrMsg').hidden = false; $('#qrMsg').textContent = t('qr.unsupported'); } });
+  $('#qrStop').addEventListener('click', stop);
+  $('#qrForm').addEventListener('submit', ev => { ev.preventDefault(); openCode($('#qrCode').value.trim()); });
+  const openCode = raw => { const id = raw.replace(/^.*[#:/]/, ''); if (D.members[id]) profile(id); else if (D.members[raw]) profile(raw); else toast(t('qr.notfound')); };
+};
+function qrCard(m) { modal(`<div class="body" style="text-align:center"><h2>${esc(D.settings.clubName)}</h2><div style="display:inline-block;padding:12px;background:#fff;border:1px solid var(--line);border-radius:12px">${qrSvg(m.id, 180)}</div><h3 style="margin-top:10px">${esc(fullName(m))}</h3><div style="color:var(--muted)">${esc(sportName(m.sportId))} · ${esc(beltName(m.belt))}</div><div style="font-family:monospace;margin-top:6px;font-size:12px">${esc(m.id)}</div><div class="ff"><div class="right"><button class="btn" data-close>OK</button></div></div></div>`); }
+function qrSvg(text, size) { try { const q = qrcode(0, 'M'); q.addData(text); q.make(); const n = q.getModuleCount(); const c = size / (n + 8); let p = ''; for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (q.isDark(y, x)) p += `M${(x + 4) * c} ${(y + 4) * c}h${c}v${c}h-${c}z`; return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><rect width="${size}" height="${size}" fill="#fff"/><path d="${p}" fill="#000"/></svg>`; } catch (e) { return `<div class="warn">QR indisponible</div>`; } }
+
+// ---------- Export ----------
+function exportCsv() { const h = ['Nom', 'Prénom', 'Naissance', 'Genre', 'Téléphone', 'Parent', 'Sport', 'Catégorie', 'Ceinture', 'Inscription', 'Fin abonnement', 'Statut', 'Assurance', 'Licence', 'CIN', 'Adresse', 'Code']; const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"'; const lines = [h.join(';'), ...members().map(m => [m.lastName, m.firstName, m.birthDate, m.sex, m.phone, m.parentContact, sportName(m.sportId), t(catOf(m)), beltName(m.belt), m.joinDate, m.endDate, t(subState(m).k), m.insuranceDate, m.licence, m.cin, m.address, m.id].map(q).join(';'))]; const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' })); a.download = `joueurs-${today()}.csv`; document.body.appendChild(a); a.click(); a.remove(); }
+
+// ---------- Demo ----------
+function demo() {
+  const S = EMPTY(); const T = today(); const h = s => { let x = 0; for (const c of s) x = (x * 31 + c.charCodeAt(0)) >>> 0; return x; };
+  S.coaches = { c1: { id: 'c1', firstName: 'Hassan', lastName: 'Bouzid', sportId: 'tkd', speciality: 'Taekwondo · 4e dan', phone: '0661 11 22 33', email: '', salary: 3500 }, c2: { id: 'c2', firstName: 'Khadija', lastName: 'Amrani', sportId: 'fit', speciality: 'Fitness & Aérobic', phone: '0662 44 55 66', email: '', salary: 3000 }, c3: { id: 'c3', firstName: 'Youssef', lastName: 'Tazi', sportId: 'kick', speciality: 'Kickboxing', phone: '0663 77 88 99', email: '', salary: 2800 } };
+  const first = ['Yassine', 'Salma', 'Adam', 'Lina', 'Rayane', 'Nour', 'Omar', 'Imane', 'Karim', 'Hiba', 'Ilyas', 'Aya', 'Mehdi', 'Sara', 'Anas', 'Malak', 'Hamza', 'Douae', 'Amine', 'Rim', 'Zakaria', 'Ghita', 'Bilal', 'Kenza', 'Taha', 'Nada', 'Reda', 'Wiam', 'Souhail', 'Yasmine', 'Ayoub', 'Chaima', 'Walid', 'Houda', 'Nabil', 'Ikram'];
+  const last = ['Amrani', 'Bouzidi', 'El Idrissi', 'Tazi', 'Oufkir', 'Benali', 'Haddad', 'Sabri', 'Moussaoui', 'Zahiri', 'Chakir', 'Rahmani', 'Lahlou', 'Bennani', 'Ouazzani', 'Kettani', 'Fassi', 'Alaoui', 'Berrada', 'Chraibi', 'Daoudi', 'El Fassi', 'Filali', 'Guessous', 'Hajji', 'Jabri', 'Kabbaj', 'Lamrani', 'Mansouri', 'Naciri', 'Ouali', 'Qadiri', 'Rachidi', 'Saadi', 'Tahiri', 'Ziani'];
+  const sports = ['tkd', 'tkd', 'tkd', 'tkd', 'fit', 'fit', 'kick', 'aero']; const quart = ['Hay Mohammadi', 'Dakhla', 'Talborjt', 'Hay Salam', 'Founty', 'Tikiouine', 'Anza', 'Bensergao'];
+  for (let i = 0; i < 36; i++) {
+    const id = 'm' + (1001 + i); const r = h(id); const sport = sports[r % 8]; const sex = i % 2 ? 'F' : 'M'; const a = sport === 'fit' || sport === 'aero' ? 18 + ((i * 11) % 30) : 6 + ((i * 13) % 30);
+    const by = new Date().getFullYear() - a; const birth = `${by}-${pad(1 + r % 12)}-${pad(1 + r % 27)}`; const endOff = ((i * 37) % 90) - 20; const end = addDays(T, endOff); const join = addDays(T, -(30 + r % 600));
+    const belt = sport === 'tkd' ? ((i * 7 + 3) % 11) : null; const ins = r % 3 === 0 ? '' : addDays(T, -(r % 400));
+    S.members[id] = { id, firstName: first[i], lastName: last[(i * 7) % 36], birthDate: birth, sex, phone: a >= 16 ? `06${pad(r % 100)} ${pad(r % 97)} ${pad(r % 89)} ${pad(r % 83)}` : '', parentContact: a < 16 ? `Parent : 06${pad(r % 90)} ${pad(r % 70)} ${pad(r % 60)} ${pad(r % 50)}` : '', sportId: sport, coachId: sport === 'tkd' ? 'c1' : sport === 'kick' ? 'c3' : 'c2', belt, joinDate: join, endDate: end, insuranceDate: ins, licence: ins ? 'FRM-' + (24100 + i) : '', cin: a >= 18 ? 'JB' + (100000 + r % 900000) : '', medicalDate: addDays(join, 3), address: quart[r % 8], notes: '', archived: false, createdAt: join };
+    const plan = S.settings.plans.find(p => p.sportId === sport) || S.settings.plans[r % 3]; let d = end, k = 0;
+    while (k < 5 && d > addDays(T, -180)) { const start = addMonths(d, -plan.months); const pid = `pay_${id}_${k}`; S.payments[pid] = { id: pid, memberId: id, memberName: first[i] + ' ' + last[(i * 7) % 36], planId: plan.id, planName: plan.name, months: plan.months, amount: plan.price, date: start > T ? T : start, method: ['cash', 'cash', 'transfer', 'mobile'][k % 4], note: '' }; d = start; k++; }
   }
-  function selectedPayMember() { const n = $('#pMember').value.trim().toLowerCase(); return activeMembersForList().find(x => fullName(x).toLowerCase() === n); }
-  function syncPayForm(keepAmount) {
-    const m = selectedPayMember(); const p = S.config.plans.find(x => x.id === $('#pPlan').value);
-    $('#pMemberHint').textContent = m ? `${groupName(m.groupId)} · fin actuelle : ${fmtDate(m.endDate)}` : ($('#pMember').value ? 'Adhérent introuvable : choisissez un nom de la liste.' : '');
-    if (p && !keepAmount) $('#pAmount').value = p.price;
-    const pv = $('#pPreview');
-    if (m && p) { const start = (m.endDate && m.endDate >= today()) ? m.endDate : ($('#pDate').value || today()); const end = addMonths(start, p.months); pv.hidden = false; pv.textContent = `Nouvelle fin d'abonnement : ${fmtDate(end)} (${p.months} mois à partir du ${fmtDate(start)}).`; pv.dataset.end = end; }
-    else pv.hidden = true;
-  }
-  $('#pMember').addEventListener('input', () => syncPayForm(true)); $('#pPlan').addEventListener('change', () => syncPayForm(false)); $('#pDate').addEventListener('change', () => syncPayForm(true));
-  $('#payForm').addEventListener('submit', async ev => {
-    ev.preventDefault();
-    const m = selectedPayMember(); const p = S.config.plans.find(x => x.id === $('#pPlan').value);
-    if (!m) { $('#pMember').focus(); return toast('Choisissez un adhérent de la liste'); }
-    if (!p || !S.db) return;
-    const end = $('#pPreview').dataset.end; const id = uid('pay');
-    const pay = { id, memberId: m.id, memberName: fullName(m), planId: p.id, planName: p.name, months: p.months, amount: +$('#pAmount').value || 0, date: $('#pDate').value || today(), method: $('#pMethod').value, note: $('#pNote').value.trim(), createdAt: new Date().toISOString() };
-    try {
-      await S.db.doc('payments/' + id).set(pay);
-      await S.db.doc('members/' + m.id).update({ endDate: end, planId: p.id, updatedAt: new Date().toISOString() });
-      $('#dlgPay').close(); toast(`${fmtDH(pay.amount)} encaissé · fin ${fmtDate(end)}`);
-    } catch (e) { dbError(e, 'l\'encaissement'); }
-  });
+  for (let dd = 0; dd < 30; dd++) { const date = addDays(T, -dd); const dow = new Date(date + 'T00:00:00').getDay(); S.settings.sports.forEach(s => { const daysOf = s.id === 'tkd' ? [1, 3, 5] : s.id === 'kick' ? [2, 4] : [1, 2, 3, 4, 5]; if (!daysOf.includes(dow)) return; const present = Object.values(S.members).filter(m => m.sportId === s.id && h(m.id + date) % 10 < 7).map(m => m.id); S.attendance[`${date}_${s.id}`] = { date, sportId: s.id, present }; }); }
+  const mo = T.slice(0, 7); const prevMo = addMonths(T.slice(0, 7) + '-01', -1).slice(0, 7);
+  [[mo, 'rent', 'Loyer salle', 4000], [mo, 'salaries', 'Salaires entraîneurs', 9300], [mo, 'utilities', 'Électricité / eau', 650], [prevMo, 'rent', 'Loyer salle', 4000], [prevMo, 'salaries', 'Salaires entraîneurs', 9300], [prevMo, 'equipment', 'Protections et plastrons', 2200]].forEach(([m, c, l, a], i) => S.expenses['x' + i] = { id: 'x' + i, label: l, category: c, amount: a, date: m + '-05' });
+  S.titles = { t1: { id: 't1', memberId: 'm1010', competition: 'Championnat régional Souss-Massa', rank: 'gold', date: addDays(T, -40) }, t2: { id: 't2', memberId: 'm1001', competition: 'Championnat régional Souss-Massa', rank: 'bronze', date: addDays(T, -40) }, t3: { id: 't3', memberId: 'm1010', competition: 'Coupe du Trône (cadets)', rank: 'silver', date: addDays(T, -120) } };
+  S.exams = { e1: { id: 'e1', date: addDays(T, -15), examiner: 'Hassan Bouzid', title: 'Passage de grade — automne', candidates: ['m1001', 'm1002', 'm1004'].filter(x => S.members[x]).map(mid => ({ memberId: mid, from: S.members[mid].belt, to: Math.min((S.members[mid].belt ?? -1) + 1, 10), result: 'pending' })) } };
+  return S;
+}
 
-  // ---------- Export ----------
-  async function exportCSV() {
-    if (!S.downloads) return;
-    const h = ['Nom', 'Prénom', 'Naissance', 'Sexe', 'Téléphone', 'Parent', 'Groupe', 'Ceinture', 'Inscription', 'Formule', 'Fin abonnement', 'Statut', 'CIN', 'Licence', 'Certificat médical', 'Quartier', 'Notes'];
-    const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
-    const lines = [h.join(';'), ...S.members.map(m => [m.lastName, m.firstName, m.birthDate, m.sex, m.phone, m.parentContact, groupName(m.groupId), BELTS[m.belt]?.[1], m.joinDate, planName(m.planId), m.endDate, status(m).t, m.cin, m.licence, m.medicalDate, m.quartier, m.notes].map(q).join(';'))];
-    const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `adherents-${today()}.csv`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-  }
-  $('#btnExport').addEventListener('click', exportCSV);
-
-  // ---------- Wiring ----------
-  $$('[data-open]').forEach(b => b.addEventListener('click', () => b.dataset.open === 'member' ? openMember(null) : openPayment(null)));
-  $$('[data-close-dialog]').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
-  ['#q', '#fGroup', '#fStatus'].forEach(s => $(s).addEventListener('input', renderMembers));
-  ['#aDate', '#aGroup'].forEach(s => $(s).addEventListener('change', renderAttendance));
-  ['#pMonth', '#pq'].forEach(s => $(s).addEventListener('input', renderPayments));
-
-  // ---------- Local store (this browser) ----------
-  const KEY = 'dojang.store.v1';
-  const store = { data: { settings: {}, members: {}, payments: {}, attendance: {} }, listeners: [] };
-  function loadStore() { try { const raw = localStorage.getItem(KEY); if (raw) store.data = { settings: {}, members: {}, payments: {}, attendance: {}, ...JSON.parse(raw) }; } catch (e) {} }
-  function saveStore() { try { localStorage.setItem(KEY, JSON.stringify(store.data)); } catch (e) { toast('Impossible d\'enregistrer : stockage du navigateur indisponible.'); } }
-  function notify() { store.listeners.forEach(fn => fn()); }
-  const localDb = {
-    doc(path) { const [col, id] = path.split('/'); return {
-      async set(body) { store.data[col] = store.data[col] || {}; store.data[col][id] = structuredClone(body); saveStore(); notify(); },
-      async update(patch) { const d = (store.data[col] || {})[id]; if (!d) throw { code: 'invalid_argument', message: 'missing' }; Object.assign(d, structuredClone(patch)); saveStore(); notify(); },
-      async delete() { if (store.data[col]) delete store.data[col][id]; saveStore(); notify(); },
-    }; },
-    seed(data) { store.data = data; saveStore(); notify(); },
-  };
-  function wipe() { store.data = { settings: {}, members: {}, payments: {}, attendance: {} }; saveStore(); notify(); }
-
-  // Demo content (example people, not real members)
-  function demoData() {
-    const t = today(); const cfg = structuredClone(DEFAULT_CONFIG);
-    const people = [
-      ['Amrani','Yassine','2015-03-12','M','0661 23 45 67','Maman : 0661 23 45 67','g1',3,'p3', 40, 200, 2],
-      ['Bouzidi','Salma','2014-09-02','F','','Papa : 0670 11 22 33','g1',5,'p1', 5, 60, 1],
-      ['El Idrissi','Adam','2016-01-20','M','','Maman : 0655 44 55 66','g1',1,'p1', -12, 300, 4],
-      ['Tazi','Lina','2012-06-30','F','0612 34 56 78','Papa : 0612 34 56 78','g2',6,'p3', 70, 100, 1],
-      ['Oufkir','Rayane','2010-11-15','M','0623 45 67 89','','g2',8,'p1', 2, 20, 1],
-      ['Benali','Nour','2011-04-08','F','0634 56 78 90','Maman : 0634 56 78 90','g2',4,'p1', -3, 10, 2],
-      ['Haddad','Omar','1998-02-14','M','0645 67 89 01','','g3',9,'p12', 200, 150, 1],
-      ['Sabri','Imane','2001-07-22','F','0656 78 90 12','','g3',7,'p3', 25, 400, 3],
-      ['Moussaoui','Karim','1995-12-05','M','0667 89 01 23','','g3',10,'p1', -40, 30, 6],
-      ['Zahiri','Hiba','2009-10-10','F','0678 90 12 34','Papa : 0678 90 12 34','g4',11,'p12', 150, 90, 1],
-      ['Chakir','Ilyas','2008-05-19','M','0689 01 23 45','','g4',10,'p3', 12, 60, 2],
-      ['Rahmani','Aya','2013-08-27','F','','Maman : 0690 12 34 56','g1',2,'p1', 18, 15, 1],
-    ];
-    const members = {}, payments = {}, attendance = {};
-    people.forEach((p, i) => {
-      const id = 'm_demo' + (i + 1); const end = addDays(t, p[9]); const join = addDays(t, -p[10]);
-      members[id] = { id, lastName: p[0], firstName: p[1], birthDate: p[2], sex: p[3], phone: p[4], parentContact: p[5], groupId: p[6], belt: p[7], planId: p[8], joinDate: join, endDate: end, cin: '', licence: p[7] >= 6 ? 'FRM-' + (24100 + i) : '', medicalDate: addMonths(join, -p[11]), quartier: ['Hay Mohammadi','Dakhla','Talborjt','Hay Salam','Founty','Tikiouine'][i % 6], notes: '', archived: false, createdAt: join, updatedAt: join };
-      const plan = cfg.plans.find(x => x.id === p[8]);
-      if (p[10] <= 60) payments['pay_ins' + i] = { id: 'pay_ins' + i, memberId: id, memberName: p[0] + ' ' + p[1], planId: '', planName: 'Frais d\'inscription', months: 0, amount: cfg.inscriptionFee, date: join, method: 'Espèces', note: 'Inscription', createdAt: join };
-      let d = end; let k = 0;
-      while (k < 4 && d > addDays(t, -170)) { const start = addMonths(d, -plan.months); const pid = `pay_demo${i}_${k}`; payments[pid] = { id: pid, memberId: id, memberName: p[0] + ' ' + p[1], planId: plan.id, planName: plan.name, months: plan.months, amount: plan.price, date: start > t ? t : start, method: k % 3 === 0 ? 'Espèces' : k % 3 === 1 ? 'Virement' : 'Mobile', note: k === 0 && p[10] < 70 ? 'inscription incluse' : '', createdAt: start }; d = start; k++; }
-    });
-    for (let dd = 0; dd < 30; dd++) { const date = addDays(t, -dd); const dow = new Date(date + 'T00:00:00').getDay();
-      cfg.groups.forEach(g => { const days = g.id === 'g3' ? [2, 4] : g.id === 'g4' ? [6] : [1, 3, 5]; if (!days.includes(dow)) return; const present = Object.values(members).filter(m => m.groupId === g.id && (hash(m.id + date) % 10) < 7).map(m => m.id); attendance[`${date}_${g.id}`] = { date, groupId: g.id, present, updatedAt: date }; });
-    }
-    return { settings: { config: cfg }, members, payments, attendance };
-  }
-  function hash(s) { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h; }
-
-  $('#btnDemo').addEventListener('click', async () => { if (!await confirmBox('Charger la démo ?', 'Les données actuelles de ce navigateur seront remplacées par des adhérents fictifs.', 'Charger')) return; localDb.seed(demoData()); toast('Données de démonstration chargées'); });
-  $('#btnWipe').addEventListener('click', async () => { if (!await confirmBox('Tout effacer ?', 'Adhérents, paiements et présences enregistrés dans ce navigateur seront supprimés.', 'Effacer')) return; wipe(); toast('Données effacées'); });
-
-  // ---------- Boot ----------
-  loadStore();
-  S.db = localDb; S.canWrite = true; $('#btnExport').hidden = false;
-  store.listeners.push(() => {
-    const cfg = store.data.settings && store.data.settings.config;
-    S.config = cfg ? { ...structuredClone(DEFAULT_CONFIG), ...cfg } : structuredClone(DEFAULT_CONFIG);
-    S.members = Object.values(store.data.members || {});
-    S.payments = Object.values(store.data.payments || {});
-    S.attendance = { ...(store.data.attendance || {}) };
-    render();
-  });
-  if (!Object.keys(store.data.members || {}).length && !localStorage.getItem(KEY)) { try { localDb.seed(demoData()); } catch (e) { console.error(e); } }
-  notify();
-  go(startPage);
+// ---------- Boot ----------
+$('#langs').innerHTML = ['en', 'fr', 'ar'].map(l => `<button data-lang="${l}" title="${l}">${FLAGS[l]}</button>`).join('');
+$$('#langs button').forEach(b => b.addEventListener('click', () => { LANG = b.dataset.lang; try { localStorage.setItem('dojang.lang', LANG); } catch (e) {} applyLang(); render(); }));
+$('#burger').addEventListener('click', () => { $('#side').classList.add('open'); $('#scrim').classList.add('open'); });
+$('#scrim').addEventListener('click', () => { $('#side').classList.remove('open'); $('#scrim').classList.remove('open'); });
+$('#logout').addEventListener('click', () => { try { sessionStorage.removeItem('dojang.auth'); } catch (e) {} $('#app').hidden = true; $('#login').hidden = false; });
+$('#loginForm').addEventListener('submit', ev => { ev.preventDefault(); if ($('#loginPass').value === D.settings.password) { try { sessionStorage.setItem('dojang.auth', '1'); } catch (e) {} enter(); } else { $('#loginHint').textContent = t('wrongPass'); } });
+function enter() { $('#login').hidden = true; $('#app').hidden = false; render(); }
+const had = load(); if (!had) { D = demo(); try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) {} }
+try { const p = localStorage.getItem('dojang.page'); if (p && NAV.some(n => n[0] === p)) PAGE = p; } catch (e) {}
+applyLang(); $('#loginClub').textContent = D.settings.clubName; document.title = D.settings.clubName;
+$('#loginHint').textContent = D.settings.password === 'admin' ? 'Démo : mot de passe « admin »' : '';
+let authed = false; try { authed = sessionStorage.getItem('dojang.auth') === '1'; } catch (e) {}
+if (authed) enter();
 })();
 </script>
 </body>
